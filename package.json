@@ -12,6 +12,20 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.0.6"
+    "@astrojs/react": "^6.0.1",
+    "@fontsource-variable/fraunces": "^5.2.9",
+    "@fontsource/atkinson-hyperlegible": "^5.2.8",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@lucide/astro": "^1.24.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "astro": "^7.0.6",
+    "flag-icons": "^7.5.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "prettier": "3.9.5",
+    "prettier-plugin-astro": "0.14.1"
   }
 }

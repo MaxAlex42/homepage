@@ -1,0 +1,13 @@
+---
+const navItems = [
+    {"href": "/about", "label": "About"}
+]
+---
+
+<footer class="site-footer">
+    <nav class="nav-bar">
+        {navItems.map((item) => (
+          <a href={item.href}>{item.label}</a>
+      ))}
+    </nav>
+</footer>

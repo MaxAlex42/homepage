@@ -1,0 +1,27 @@
+---
+interface Props {
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  title = "Welcome",
+  subtitle
+} = Astro.props;
+---
+
+<main class="main-column">
+  <section class="main-panel">
+    <header class="main-panel__header">
+      <h1>{title}</h1>
+
+      {subtitle && (
+        <p>{subtitle}</p>
+      )}
+    </header>
+
+    <div class="main-panel__content">
+      <slot />
+    </div>
+  </section>
+</main>

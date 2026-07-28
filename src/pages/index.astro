@@ -1,17 +1,35 @@
 ---
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import MainPage from "../components/MainPage.astro";
+import RightSidebar from "../components/RightSidebar.astro";
+import "../styles/global.css"
+import "../styles/right-sidebar.css"
 
+interface Props {
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  title = "Welcome",
+  subtitle
+} = Astro.props;
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <Header />
+  <body >
+    <MainPage title="Hi, I'm Your Name" subtitle="Developer, designer, and occasional writer."/>
+    <RightSidebar/>
+  </body>
+  <Footer />
 </html>
