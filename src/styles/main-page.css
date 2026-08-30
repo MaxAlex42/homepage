@@ -1,0 +1,99 @@
+.main-page {
+    min-width: 0;
+    margin-top: 5em;
+}
+
+.main-card {
+    overflow: hidden;
+    background-color: var(--white);
+    border: 2px solid var(--brown);
+    border-radius: var(--panel-radius);
+}
+
+.main-card__header {
+    padding: 1.5rem;
+    background-color: var(--brown);
+    border-bottom: 0.35rem solid var(--light-brown);
+    color: var(--white);
+}
+
+.main-card__eyebrow {
+    margin: 0 0 0.4rem;
+    color: var(--yellow);
+    font-family: var(--font-code);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.main-card__header h1 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+}
+
+.main-card__header p:last-child {
+    max-width: 45rem;
+    margin: 0.6rem 0 0;
+    line-height: 1.5;
+}
+
+.main-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1.5rem;
+}
+
+.content-section {
+    min-width: 0;
+}
+
+.content-section + .content-section {
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--light-brown);
+}
+
+.content-section h2 {
+    margin: 0 0 0.8rem;
+    color: var(--brown);
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+}
+
+.content-section p {
+    max-width: 65ch;
+    margin: 0 0 0.8rem;
+    line-height: 1.65;
+}
+
+.content-section p:last-child {
+    margin-bottom: 0;
+}
+
+.placeholder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: 1rem;
+}
+
+.placeholder-card {
+    padding: 1rem;
+    background-color: var(--background);
+    border: 1px solid var(--light-brown);
+    border-radius: 0.65rem;
+}
+
+.placeholder-card h3 {
+    margin: 0 0 0.4rem;
+    color: var(--red);
+    font-family: var(--font-heading);
+    font-size: 1rem;
+}
+
+.placeholder-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}

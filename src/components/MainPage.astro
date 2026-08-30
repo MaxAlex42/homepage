@@ -1,27 +1,67 @@
 ---
-interface Props {
-  title?: string;
-  subtitle?: string;
-}
-
-const {
-  title = "Welcome",
-  subtitle
-} = Astro.props;
+import "../styles/main-page.css";
 ---
 
-<main class="main-column">
-  <section class="main-panel">
-    <header class="main-panel__header">
-      <h1>{title}</h1>
-
-      {subtitle && (
-        <p>{subtitle}</p>
-      )}
+<main class="main-page">
+  <section class="main-card">
+    <header class="main-card__header">
+      <p class="main-card__eyebrow">Welcome</p>
+      <h1>Main Content</h1>
+      <p>
+        This is placeholder content for testing the central column of the site.
+      </p>
     </header>
 
-    <div class="main-panel__content">
-      <slot />
+    <div class="main-card__content">
+      <section class="content-section">
+        <h2>About</h2>
+
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam
+          molestiae temporibus recusandae atque deserunt exercitationem.
+        </p>
+
+        <p>
+          This section can later contain your introduction, current work,
+          interests, or whatever you want visitors to see first.
+        </p>
+      </section>
+
+      <section class="content-section">
+        <h2>Projects</h2>
+
+        <div class="placeholder-grid">
+          <article class="placeholder-card">
+            <h3>Project One</h3>
+            <p>
+              Placeholder description for one of your future projects.
+            </p>
+          </article>
+
+          <article class="placeholder-card">
+            <h3>Project Two</h3>
+            <p>
+              Another placeholder project used to test the layout.
+            </p>
+          </article>
+
+          <article class="placeholder-card">
+            <h3>Project Three</h3>
+            <p>
+              This can later become a link to a real project page.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2>Latest</h2>
+
+        <p>
+          More placeholder content so you can see how the middle column behaves
+          when it becomes taller than the sidebars.
+        </p>
+      </section>
     </div>
   </section>
 </main>

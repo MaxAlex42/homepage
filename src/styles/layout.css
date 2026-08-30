@@ -1,0 +1,17 @@
+.page-layout {
+  display: grid;
+
+  grid-template-columns:
+    minmax(13rem, 16rem)
+    minmax(0, 1fr)
+    minmax(13rem, 16rem);
+
+  align-items: start;
+
+  gap: 1.5rem;
+
+  width: min(100% - 2rem, 90rem);
+
+  margin-inline: auto;
+  padding-block: 1.5rem;
+}

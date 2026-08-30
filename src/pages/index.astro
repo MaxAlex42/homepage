@@ -2,9 +2,11 @@
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import MainPage from "../components/MainPage.astro";
+import LeftSidebar from "../components/LeftSidebar.astro";
 import RightSidebar from "../components/RightSidebar.astro";
 import "../styles/global.css"
 import "../styles/right-sidebar.css"
+import "../styles/layout.css"
 
 interface Props {
   title?: string;
@@ -27,8 +29,9 @@ const {
     <title>Astro</title>
   </head>
   <Header />
-  <body >
-    <MainPage title="Hi, I'm Your Name" subtitle="Developer, designer, and occasional writer."/>
+  <body class="page-layout">
+    <LeftSidebar />
+    <MainPage />
     <RightSidebar/>
   </body>
   <Footer />

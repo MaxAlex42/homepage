@@ -1,0 +1,134 @@
+.left-sidebar {
+    min-width: 0;
+    overflow: hidden;
+    background-color: var(--white);
+    border: 2px solid var(--brown);
+    border-radius: var(--panel-radius);
+    margin-top: 5em;
+}
+
+.left-sidebar__header {
+    padding: 0.55rem 0.8rem;
+    background-color: var(--brown);
+    border-bottom: 0.35rem solid var(--light-brown);
+    color: var(--white);
+    font-family: var(--font-code);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.left-sidebar__content {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.profile-section,
+.sidebar-section {
+    padding-block: 1rem;
+}
+
+.profile-section {
+    padding-top: 0;
+}
+
+.sidebar-section {
+    border-top: 1px dashed var(--light-brown);
+}
+
+.avatar {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 1rem;
+}
+
+.avatar img {
+    display: block;
+
+    width: min(100%, 9rem);
+    height: auto;
+    background-color: var(--background);
+    border: 2px solid var(--brown);
+    border-radius: 0.75rem;
+    image-rendering: pixelated;
+}
+
+.identity {
+    text-align: center;
+}
+
+.identity h2 {
+    margin: 0 0 0.35rem;
+    color: var(--brown);
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+}
+
+.identity p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.sidebar-section h3 {
+    margin: 0 0 0.75rem;
+    color: var(--red);
+    font-family: var(--font-code);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.cv-list {
+    margin: 0;
+}
+
+.cv-list > div {
+    display: grid;
+    gap: 0.15rem;
+    padding-block: 0.45rem;
+}
+
+.cv-list dt {
+    color: var(--brown);
+    font-family: var(--font-code);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.cv-list dd {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.employment-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+}
+
+.status-dot {
+    flex-shrink: 0;
+    width: 0.7rem;
+    height: 0.7rem;
+    margin-top: 0.25rem;
+    background-color: var(--green);
+    border: 2px solid var(--brown);
+    border-radius: 50%;
+}
+
+.employment-status strong {
+    color: var(--brown);
+    font-family: var(--font-heading);
+}
+
+.employment-status p {
+    margin: 0.2rem 0 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
