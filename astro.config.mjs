@@ -8,6 +8,7 @@ import { unified } from "@astrojs/markdown-remark";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://maxalex42.net",
   markdown: {
     shikiConfig: {
       theme: "github-light",
