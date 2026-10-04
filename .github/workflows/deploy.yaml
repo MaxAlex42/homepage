@@ -14,7 +14,6 @@ jobs:
   deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
-
     environment: production
 
     steps:
@@ -38,14 +37,26 @@ jobs:
       - name: Build Astro site
         run: pnpm build
 
+      - name: Check deployment secrets
+        env:
+          HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
+          HETZNER_USER: ${{ secrets.HETZNER_USER }}
+          HETZNER_SSH_KEY: ${{ secrets.HETZNER_SSH_KEY }}
+          HETZNER_REMOTE_PATH: ${{ secrets.HETZNER_REMOTE_PATH }}
+        run: |
+          test -n "$HETZNER_HOST" || { echo "HETZNER_HOST is missing"; exit 1; }
+          test -n "$HETZNER_USER" || { echo "HETZNER_USER is missing"; exit 1; }
+          test -n "$HETZNER_SSH_KEY" || { echo "HETZNER_SSH_KEY is missing"; exit 1; }
+          test -n "$HETZNER_REMOTE_PATH" || { echo "HETZNER_REMOTE_PATH is missing"; exit 1; }
+
       - name: Configure SSH key
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.HETZNER_SSH_KEY }}
+          HETZNER_SSH_KEY: ${{ secrets.HETZNER_SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/hetzner
+          printf '%s\n' "$HETZNER_SSH_KEY" > ~/.ssh/hetzner
           chmod 600 ~/.ssh/hetzner
 
       - name: Add Hetzner host key
@@ -61,7 +72,9 @@ jobs:
           HETZNER_USER: ${{ secrets.HETZNER_USER }}
           HETZNER_REMOTE_PATH: ${{ secrets.HETZNER_REMOTE_PATH }}
         run: |
-          sftp -i ~/.ssh/hetzner -P 22 \
+          sftp \
+            -i ~/.ssh/hetzner \
+            -P 22 \
             "$HETZNER_USER@$HETZNER_HOST" <<EOF
           cd $HETZNER_REMOTE_PATH
           put -r dist/*
