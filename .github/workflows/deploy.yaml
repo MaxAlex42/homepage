@@ -82,7 +82,7 @@ jobs:
           -mkdir _astro
           -mkdir blog
           -mkdir projects
-          .mkdir about
+          -mkdir about
           -mkdir changelog
           -mkdir images
 
