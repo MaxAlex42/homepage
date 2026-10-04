@@ -77,5 +77,22 @@ jobs:
             -P 22 \
             "$HETZNER_USER@$HETZNER_HOST" <<EOF
           cd $HETZNER_REMOTE_PATH
-          put -r dist/*
+
+          -mkdir _astro
+          -mkdir blog
+          -mkdir projects
+          -mkdir changelog
+          -mkdir images
+
+          put -r dist/_astro/*
+          put -r dist/blog/*
+          put -r dist/projects/*
+          put -r dist/changelog/*
+          put -r dist/images/*
+
+          put dist/index.html
+          put dist/rss.xml
+          put dist/favicon.ico
+          put dist/favicon.svg
+          put dist/robots.txt
           EOF
