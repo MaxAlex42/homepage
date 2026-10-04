@@ -1,0 +1,63 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    environment: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro site
+        run: npm run build
+
+      - name: Configure SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.HETZNER_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/hetzner
+          chmod 600 ~/.ssh/hetzner
+
+      - name: Add Hetzner host key
+        env:
+          HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
+        run: |
+          ssh-keyscan -p 22 "$HETZNER_HOST" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Upload website
+        env:
+          HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
+          HETZNER_USER: ${{ secrets.HETZNER_USER }}
+          HETZNER_REMOTE_PATH: ${{ secrets.HETZNER_REMOTE_PATH }}
+        run: |
+          sftp -i ~/.ssh/hetzner -P 22 \
+            "$HETZNER_USER@$HETZNER_HOST" <<EOF
+          cd $HETZNER_REMOTE_PATH
+          put -r dist/*
+          EOF
