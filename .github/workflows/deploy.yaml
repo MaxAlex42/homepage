@@ -98,6 +98,10 @@ jobs:
           put dist/projects/*
           cd ..
 
+          cd about
+          put dist/about/*
+          cd ..
+
           cd changelog
           put dist/changelog/*
           cd ..
