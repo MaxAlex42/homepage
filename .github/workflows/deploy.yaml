@@ -76,6 +76,7 @@ jobs:
             -i ~/.ssh/hetzner \
             -P 22 \
             "$HETZNER_USER@$HETZNER_HOST" <<EOF
+
           cd $HETZNER_REMOTE_PATH
 
           -mkdir _astro
@@ -84,15 +85,30 @@ jobs:
           -mkdir changelog
           -mkdir images
 
-          put -r dist/_astro/*
-          put -r dist/blog/*
-          put -r dist/projects/*
-          put -r dist/changelog/*
-          put -r dist/images/*
+          cd _astro
+          put dist/_astro/*
+          cd ..
+
+          cd blog
+          put dist/blog/*
+          cd ..
+
+          cd projects
+          put dist/projects/*
+          cd ..
+
+          cd changelog
+          put dist/changelog/*
+          cd ..
+
+          cd images
+          put dist/images/*
+          cd ..
 
           put dist/index.html
           put dist/rss.xml
           put dist/favicon.ico
           put dist/favicon.svg
           put dist/robots.txt
+
           EOF
