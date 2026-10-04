@@ -1,0 +1,371 @@
+.blog-post {
+  min-width: 0;
+  overflow: hidden;
+
+  background: var(--white);
+  border: 2px solid var(--brown);
+}
+
+.blog-post__content {
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+.blog-post__content > :first-child {
+  margin-top: 0;
+}
+
+.blog-post__content > :last-child {
+  margin-bottom: 0;
+}
+
+.blog-post__content p {
+  max-width: 70ch;
+  line-height: 1.75;
+}
+
+.blog-post__content h2 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+
+  color: var(--brown);
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+}
+
+.blog-post__content h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+
+  color: var(--red);
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+}
+
+.blog-post__content a {
+  color: var(--red);
+  font-weight: 700;
+
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}
+
+.blog-post__content a:hover {
+  color: var(--brown);
+  background: var(--yellow);
+}
+
+.blog-post__content :not(pre) > code {
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--light-brown);
+  font-family: var(--font-code);
+  font-size: 0.9em;
+}
+
+/* Code blocks */
+
+.blog-post__content pre {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+
+  border: 2px solid var(--brown);
+  border-left: 0.4rem solid var(--yellow);
+
+  color: var(--ink);
+
+  font-family: var(--font-code);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.blog-post__content pre code {
+  padding: 0;
+
+  background: transparent !important;
+  color: inherit;
+
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Blockquotes */
+
+.blog-post__content blockquote {
+  margin: 1.5rem 0;
+  padding: 0.8rem 1rem;
+
+  background: var(--background);
+  border-left: 0.4rem solid var(--yellow);
+
+  color: var(--brown);
+}
+
+.blog-post__content blockquote p {
+  margin: 0;
+}
+
+/* Lists */
+
+.blog-post__content ul,
+.blog-post__content ol {
+  padding-left: 1.5rem;
+  line-height: 1.7;
+}
+
+.blog-post__content li + li {
+  margin-top: 0.35rem;
+}
+
+/* Tables */
+
+.blog-post__content table {
+  width: 100%;
+  margin: 1.5rem 0;
+
+  border-collapse: collapse;
+}
+
+.blog-post__content th,
+.blog-post__content td {
+  padding: 0.6rem 0.75rem;
+
+  border: 1px solid var(--light-brown);
+
+  text-align: left;
+}
+
+.blog-post__content th {
+  background: var(--brown);
+  color: var(--white);
+
+  font-family: var(--font-code);
+}
+
+.blog-post__content tr:nth-child(even) td {
+  background: var(--background);
+}
+
+/* Images */
+
+.blog-post__content img {
+  display: block;
+
+  max-width: 100%;
+  height: auto;
+
+  margin: 1.75rem auto;
+
+  border: 2px solid var(--brown);
+}
+
+/* Horizontal rule */
+
+.blog-post__content hr {
+  margin: 2rem 0;
+  border: 0;
+}
+
+/* Math */
+
+.blog-post__content .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  margin: 1.5rem 0;
+  padding-block: 0.5rem;
+}
+
+.blog-post__header {
+  padding: 1.5rem 1.75rem;
+
+  background: var(--brown);
+  border-bottom: var(--border-thick) solid var(--light-brown);
+
+  color: var(--white);
+}
+
+.blog-post__eyebrow {
+  display: block;
+
+  margin-bottom: 0.45rem;
+
+  color: var(--yellow);
+
+  font-family: var(--font-code);
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.blog-post__header h1 {
+  max-width: 20ch;
+
+  margin: 0;
+
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.05;
+}
+
+.blog-post__header-meta {
+  margin-top: 1rem;
+
+  color: var(--background);
+
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+}
+
+.blog-post__footer {
+  padding: 1rem 1.5rem;
+  text-align: center;
+}
+
+.blog-post__footer a {
+  color: var(--brown);
+
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.blog-post-sidebar {
+  overflow: hidden;
+
+  background: var(--white);
+  border: 2px solid var(--brown);
+}
+
+.blog-post-sidebar__header {
+  padding: 0.55rem 0.8rem;
+
+  background: var(--brown);
+  border-bottom: var(--border-thick) solid var(--light-brown);
+
+  color: var(--white);
+
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.blog-post-sidebar__content {
+  padding: 0.9rem;
+}
+
+.blog-back-link {
+  display: block;
+
+  color: var(--brown);
+
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.blog-back-link:hover {
+  color: var(--red);
+}
+
+.blog-post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.blog-post-tags span {
+  padding: 0.2rem 0.4rem;
+
+  background: var(--background);
+  border: 1px solid var(--light-brown);
+
+  color: var(--brown);
+
+  font-family: var(--font-code);
+  font-size: 0.7rem;
+}
+
+.blog-post-sidebar__section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+
+  border-top: 1px dashed var(--light-brown);
+}
+
+.blog-post-sidebar__section h2 {
+  margin: 0 0 0.75rem;
+
+  color: var(--red);
+
+  font-family: var(--font-code);
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.blog-post-stats > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  gap: 0.75rem;
+  padding-block: 0.45rem;
+}
+
+.blog-post-stats > div + div {
+  border-top: 1px dashed var(--light-brown);
+}
+
+.blog-post-stats span {
+  color: var(--brown);
+
+  font-family: var(--font-code);
+  font-size: 0.65rem;
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+.blog-post-stats strong {
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.blog-post-rss p {
+  margin: 0 0 0.75rem;
+
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.blog-post-rss a {
+  display: block;
+
+  padding: 0.5rem;
+
+  background: var(--brown);
+  border: 2px solid var(--brown);
+
+  color: var(--white);
+
+  font-family: var(--font-code);
+  font-size: 0.7rem;
+  font-weight: 700;
+
+  text-align: center;
+}
+
+.blog-post-rss a:hover {
+  background: var(--yellow);
+  color: var(--brown);
+}

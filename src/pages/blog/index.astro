@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ThreeColumnLayout from "../../layouts/ThreeColumnLayout.astro";
+
+import BlogFilters from "../../components/blog/BlogFilters.astro";
+import BlogList from "../../components/blog/BlogList.astro";
+import BlogSidebar from "../../components/blog/BlogSidebar.astro";
+
+import "../../styles/blog.css";
+---
+
+<BaseLayout title="Blog | MaxAlex42">
+  <ThreeColumnLayout>
+    <BlogFilters slot="left" />
+
+    <BlogList />
+
+    <BlogSidebar slot="right" />
+  </ThreeColumnLayout>
+</BaseLayout>

@@ -1,12 +1,13 @@
 ---
 import "../styles/right-sidebar.css";
 
-const latestFeature = {
-  title: "Three-column homepage",
-  version: "0.0.2",
-  description:
-    "Added the new homepage layout with dedicated left, main, and right columns.",
-};
+import packageJson from "../../package.json";
+import { siteInfo } from "../data/site";
+import { changelog } from "../data/changelog";
+
+const version = packageJson.version;
+
+const latestFeature = changelog[0];
 ---
 
 <aside class="right-sidebar" aria-label="Site information">
@@ -17,34 +18,36 @@ const latestFeature = {
 
     <div>
       <span>Version</span>
-      <span>0.0.2</span>
+      <span>{version}</span>
     </div>
 
     <div>
       <span>Status</span>
-      <span>Development</span>
+      <span>{siteInfo.status}</span>
     </div>
   </section>
 
-  <section class="feature-block">
-    <div class="feature-block__title">
-      Latest Feature
-    </div>
+  {latestFeature && (
+    <section class="feature-block">
+      <div class="feature-block__title">
+        Latest Feature
+      </div>
 
-    <div class="feature-block__content">
-      <span class="feature-version">
-        {latestFeature.version}
-      </span>
+      <div class="feature-block__content">
+        <span class="feature-version">
+          {latestFeature.version}
+        </span>
 
-      <h2>{latestFeature.title}</h2>
+        <h2>{latestFeature.title}</h2>
 
-      <p>
-        {latestFeature.description}
-      </p>
+        <p>
+          {latestFeature.description}
+        </p>
 
-      <a class="feature-button" href="/changelog">
-        View all changes →
-      </a>
-    </div>
-  </section>
+        <a class="feature-button" href="/changelog">
+          View all changes
+        </a>
+      </div>
+    </section>
+  )}
 </aside>

@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+import BlogCard from "./BlogCard.astro";
+
+const posts = (await getCollection("blog", ({ data }) => {
+  return !data.draft;
+})).sort(
+  (a, b) =>
+    b.data.published.getTime() -
+    a.data.published.getTime()
+);
+---
+
+<section class="blog-list">
+  <header class="blog-hero">
+    <span class="blog-hero__eyebrow">Writing</span>
+
+    <div class="blog-hero__row">
+      <h1>Blog</h1>
+
+      <span class="blog-hero__meta">
+        Notes, projects & experiments
+      </span>
+    </div>
+  </header>
+
+  <div class="blog-list__entries">
+    {posts.map((post) => (
+      <BlogCard
+        title={post.data.title}
+        abstract={post.data.abstract}
+        date={post.data.published}
+        tags={post.data.tags}
+        href={`/blog/${post.id}`}
+      />
+    ))}
+  </div>
+</section>

@@ -1,0 +1,62 @@
+---
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+const tagCounts = new Map<string, number>();
+
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+
+const tags = [...tagCounts.entries()]
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<aside class="blog-filters">
+  <header class="blog-filters__header">
+    Find Posts
+  </header>
+
+  <div class="blog-filters__content">
+    <section class="blog-filter-section">
+      <label for="blog-search">
+        Search
+      </label>
+
+      <input
+        id="blog-search"
+        type="search"
+        placeholder="Search titles or keywords..."
+      />
+    </section>
+
+    <section class="blog-filter-section">
+      <h2>Tags</h2>
+
+      <div class="blog-tag-list">
+        {tags.map((tag) => (
+          <label class="blog-tag-filter">
+            <span>
+              <input
+                type="checkbox"
+                value={tag.name}
+                data-blog-tag
+              />
+              {tag.name}
+            </span>
+
+            <span>{tag.count}</span>
+          </label>
+        ))}
+      </div>
+    </section>
+
+    <button type="button" class="blog-clear-filters">
+      Clear filters
+    </button>
+  </div>
+</aside>

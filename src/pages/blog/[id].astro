@@ -1,0 +1,138 @@
+---
+import {
+  getCollection,
+  render,
+  type CollectionEntry,
+} from "astro:content";
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ThreeColumnLayout from "../../layouts/ThreeColumnLayout.astro";
+
+import "../../styles/blog.css";
+import "../../styles/blog-content.css";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formattedDate = new Intl.DateTimeFormat("de-AT", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  timeZone: "Europe/Vienna",
+}).format(post.data.published);
+
+const formattedTime = new Intl.DateTimeFormat("de-AT", {
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+  timeZone: "Europe/Vienna",
+}).format(post.data.published);
+---
+
+<BaseLayout title={`${post.data.title} | MaxAlex42`}>
+  <ThreeColumnLayout>
+
+    <aside slot="left" class="blog-post-sidebar">
+      <header class="blog-post-sidebar__header">
+        Navigation
+      </header>
+
+      <div class="blog-post-sidebar__content">
+        <a class="blog-back-link" href="/blog">
+          Back to Blog
+        </a>
+
+        {post.data.tags.length > 0 && (
+          <section class="blog-post-sidebar__section">
+            <h2>Tags</h2>
+
+            <div class="blog-post-tags">
+              {post.data.tags.map((tag) => (
+                <span>{tag}</span>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+    </aside>
+
+
+    <article class="blog-post">
+      <header class="blog-post__header">
+        <span class="blog-post__eyebrow">
+          Blog Entry
+        </span>
+
+        <h1>{post.data.title}</h1>
+
+        <div class="blog-post__header-meta">
+          <time datetime={post.data.published.toISOString()}>
+            {formattedDate} · {formattedTime}
+          </time>
+        </div>
+      </header>
+
+      <div class="blog-post__content">
+        <Content />
+      </div>
+
+      <footer class="blog-post__footer">
+        <a href="/blog">
+          Back to all posts
+        </a>
+      </footer>
+    </article>
+
+
+    <aside slot="right" class="blog-post-sidebar">
+      <header class="blog-post-sidebar__header">
+        Post Info
+      </header>
+
+      <div class="blog-post-sidebar__content">
+        <div class="blog-post-stats">
+          <div>
+            <span>Published</span>
+            <strong>{formattedDate}</strong>
+          </div>
+
+          <div>
+            <span>Time</span>
+            <strong>{formattedTime}</strong>
+          </div>
+
+          <div>
+            <span>Tags</span>
+            <strong>{post.data.tags.length}</strong>
+          </div>
+        </div>
+
+        <section class="blog-post-sidebar__section blog-post-rss">
+          <h2>Follow</h2>
+
+          <p>
+            Want to know when something new appears?
+          </p>
+
+          <a href="/rss.xml">
+            RSS Feed
+          </a>
+        </section>
+      </div>
+    </aside>
+
+  </ThreeColumnLayout>
+</BaseLayout>

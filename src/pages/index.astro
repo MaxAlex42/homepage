@@ -1,38 +1,130 @@
 ---
-import Footer from "../components/Footer.astro";
-import Header from "../components/Header.astro";
-import MainPage from "../components/MainPage.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ThreeColumnLayout from "../layouts/ThreeColumnLayout.astro";
+
 import LeftSidebar from "../components/LeftSidebar.astro";
+import MainPage from "../components/MainPage.astro";
 import RightSidebar from "../components/RightSidebar.astro";
-import "../styles/global.css"
-import "../styles/right-sidebar.css"
-import "../styles/layout.css"
-
-interface Props {
-  title?: string;
-  subtitle?: string;
-}
-
-const {
-  title = "Welcome",
-  subtitle
-} = Astro.props;
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <Header />
-  <body class="page-layout">
-    <LeftSidebar />
+<BaseLayout title="MaxAlex42">
+  <ThreeColumnLayout>
+    <LeftSidebar slot="left" />
+
     <MainPage />
-    <RightSidebar/>
-  </body>
-  <Footer />
-</html>
+
+    <RightSidebar slot="right" />
+  </ThreeColumnLayout>
+</BaseLayout>
+
+<script>
+  const searchInput =
+    document.querySelector<HTMLInputElement>("#project-search");
+
+  const technologyInputs = [
+    ...document.querySelectorAll<HTMLInputElement>(
+      "[data-project-technology]"
+    ),
+  ];
+
+  const statusInputs = [
+    ...document.querySelectorAll<HTMLInputElement>(
+      "[data-project-status]"
+    ),
+  ];
+
+  const cards = [
+    ...document.querySelectorAll<HTMLElement>(
+      "[data-project-card]"
+    ),
+  ];
+
+  const clearButton =
+    document.querySelector<HTMLButtonElement>(
+      ".project-clear-filters"
+    );
+
+  function filterProjects() {
+    const query =
+      searchInput?.value.trim().toLowerCase() ?? "";
+
+    const selectedTechnologies = technologyInputs
+      .filter((input) => input.checked)
+      .map((input) => input.value.toLowerCase());
+
+    const selectedStatuses = statusInputs
+      .filter((input) => input.checked)
+      .map((input) => input.value.toLowerCase());
+
+    for (const card of cards) {
+      const title = card.dataset.title ?? "";
+      const description = card.dataset.description ?? "";
+      const status = card.dataset.status ?? "";
+
+      const technologies = (
+        card.dataset.technologies ?? ""
+      )
+        .split(",")
+        .filter(Boolean);
+
+      const matchesSearch =
+        !query ||
+        title.includes(query) ||
+        description.includes(query) ||
+        technologies.some((technology) =>
+          technology.includes(query)
+        );
+
+      const matchesTechnology =
+        selectedTechnologies.length === 0 ||
+        selectedTechnologies.every((technology) =>
+          technologies.includes(technology)
+        );
+
+      const matchesStatus =
+        selectedStatuses.length === 0 ||
+        selectedStatuses.includes(status);
+
+      card.hidden = !(
+        matchesSearch &&
+        matchesTechnology &&
+        matchesStatus
+      );
+    }
+  }
+
+  searchInput?.addEventListener(
+    "input",
+    filterProjects
+  );
+
+  for (const input of technologyInputs) {
+    input.addEventListener(
+      "change",
+      filterProjects
+    );
+  }
+
+  for (const input of statusInputs) {
+    input.addEventListener(
+      "change",
+      filterProjects
+    );
+  }
+
+  clearButton?.addEventListener("click", () => {
+    if (searchInput) {
+      searchInput.value = "";
+    }
+
+    for (const input of technologyInputs) {
+      input.checked = false;
+    }
+
+    for (const input of statusInputs) {
+      input.checked = false;
+    }
+
+    filterProjects();
+  });
+</script>

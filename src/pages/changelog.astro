@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ThreeColumnLayout from "../layouts/ThreeColumnLayout.astro";
+import LeftSidebar from "../components/LeftSidebar.astro";
+import RightSidebar from "../components/RightSidebar.astro";
+
+import { changelog } from "../data/changelog";
+
+import "../styles/changelog.css";
+---
+
+<BaseLayout title="Changelog | MaxAlex42">
+  <ThreeColumnLayout>
+    <LeftSidebar slot="left" />
+
+    <main class="changelog-page">
+      <header class="changelog-hero">
+        <span class="changelog-hero__eyebrow">Site History</span>
+        <h1>Changelog</h1>
+      </header>
+
+      <div class="changelog-list">
+        {changelog.map((entry) => (
+          <article class="changelog-entry">
+            <header class="changelog-entry__header">
+              <div>
+                <span class="changelog-entry__version">
+                  {entry.version}
+                </span>
+
+                <h2>{entry.title}</h2>
+              </div>
+
+              <time datetime={entry.date}>
+                {new Intl.DateTimeFormat("de-AT", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                }).format(new Date(entry.date))}
+              </time>
+            </header>
+
+            <div class="changelog-entry__content">
+              <p>{entry.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </main>
+
+    <RightSidebar slot="right" />
+  </ThreeColumnLayout>
+</BaseLayout>

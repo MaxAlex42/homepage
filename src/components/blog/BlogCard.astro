@@ -1,0 +1,60 @@
+---
+interface Props {
+  title: string;
+  abstract: string;
+  href: string;
+  date: Date;
+  tags?: string[];
+}
+
+const {
+  title,
+  abstract,
+  href,
+  date,
+  tags = [],
+} = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat("de-AT", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+}).format(date);
+---
+
+<article
+  class="blog-card"
+  data-blog-card
+  data-title={title.toLowerCase()}
+  data-abstract={abstract.toLowerCase()}
+  data-tags={tags.map((tag) => tag.toLowerCase()).join(",")}
+>
+  <header class="blog-card__header">
+    <h2>
+      <a href={href}>{title}</a>
+    </h2>
+  </header>
+
+  <div class="blog-card__content">
+    <time datetime={date.toISOString()}>
+      {formattedDate}
+    </time>
+
+    <p>{abstract}</p>
+
+    {tags.length > 0 && (
+      <div class="blog-card__tags">
+        {tags.map((tag) => (
+          <span>{tag}</span>
+        ))}
+      </div>
+    )}
+
+    <a class="blog-card__read-more" href={href}>
+      Read more
+    </a>
+  </div>
+</article>

@@ -1,0 +1,58 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  technologies: string[];
+  status: "active" | "finished" | "experimental" | "archived";
+  year: number;
+  href: string;
+}
+
+const {
+  title,
+  description,
+  technologies,
+  status,
+  year,
+  href,
+} = Astro.props;
+---
+
+<article
+  class="project-card"
+  data-project-card
+  data-title={title.toLowerCase()}
+  data-description={description.toLowerCase()}
+  data-technologies={technologies.map((tech) => tech.toLowerCase()).join(",")}
+  data-status={status.toLowerCase()}
+>
+  <header class="project-card__header">
+    <div>
+      <span class="project-card__status">
+        {status}
+      </span>
+
+      <h2>
+        <a href={href}>{title}</a>
+      </h2>
+    </div>
+
+    <span class="project-card__year">
+      {year}
+    </span>
+  </header>
+
+  <div class="project-card__content">
+    <p>{description}</p>
+
+    <div class="project-card__technologies">
+      {technologies.map((technology) => (
+        <span>{technology}</span>
+      ))}
+    </div>
+
+    <a class="project-card__link" href={href}>
+      View project
+    </a>
+  </div>
+</article>

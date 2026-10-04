@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+import ProjectCard from "./ProjectCard.astro";
+
+const projects = (await getCollection("projects", ({ data }) => {
+  return !data.draft;
+})).sort((a, b) => b.data.year - a.data.year);
+---
+
+<section class="project-list">
+  <header class="project-hero">
+    <span class="project-hero__eyebrow">Selected Work</span>
+
+    <div class="project-hero__row">
+      <h1>Projects</h1>
+
+      <span class="project-hero__meta">
+        Things I've built and worked on
+      </span>
+    </div>
+  </header>
+
+  <div class="project-list__entries">
+    {projects.map((project) => (
+      <ProjectCard
+        title={project.data.title}
+        description={project.data.description}
+        technologies={project.data.technologies}
+        status={project.data.status}
+        year={project.data.year}
+        href={`/projects/${project.id}`}
+      />
+    ))}
+  </div>
+</section>

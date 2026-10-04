@@ -1,67 +1,107 @@
 ---
 import "../styles/main-page.css";
+import { getCollection } from "astro:content";
+
+const techStack = [
+  "React",
+  "Angular",
+  ".NET",
+  "Python",
+  "C#",
+  "Java",
+  "C",
+  "C++",
+];
+
+const projects = (await getCollection(
+  "projects",
+  ({ data }) => !data.draft && data.featured
+))
+  .sort((a, b) => b.data.year - a.data.year)
+  .slice(0, 3);
 ---
 
 <main class="main-page">
-  <section class="main-card">
-    <header class="main-card__header">
-      <p class="main-card__eyebrow">Welcome</p>
-      <h1>Main Content</h1>
-      <p>
-        This is placeholder content for testing the central column of the site.
-      </p>
+
+  <section class="home-profile">
+    <header class="home-profile__header">
+      <span class="home-profile__eyebrow">Welcome</span>
+      <h1>MaxAlex42</h1>
     </header>
 
-    <div class="main-card__content">
-      <section class="content-section">
-        <h2>About</h2>
+    <div class="home-profile__content">
+      <p class="home-profile__lead">
+        I'm a fullstack developer interested in building software,
+        web applications, tools and technical experiments.
+      </p>
 
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam
-          molestiae temporibus recusandae atque deserunt exercitationem.
-        </p>
+      <section class="home-profile__stack">
+        <h2>Tech Stack</h2>
 
-        <p>
-          This section can later contain your introduction, current work,
-          interests, or whatever you want visitors to see first.
-        </p>
-      </section>
-
-      <section class="content-section">
-        <h2>Projects</h2>
-
-        <div class="placeholder-grid">
-          <article class="placeholder-card">
-            <h3>Project One</h3>
-            <p>
-              Placeholder description for one of your future projects.
-            </p>
-          </article>
-
-          <article class="placeholder-card">
-            <h3>Project Two</h3>
-            <p>
-              Another placeholder project used to test the layout.
-            </p>
-          </article>
-
-          <article class="placeholder-card">
-            <h3>Project Three</h3>
-            <p>
-              This can later become a link to a real project page.
-            </p>
-          </article>
+        <div class="tech-stack">
+          {techStack.map((technology) => (
+            <span>{technology}</span>
+          ))}
         </div>
-      </section>
-
-      <section class="content-section">
-        <h2>Latest</h2>
-
-        <p>
-          More placeholder content so you can see how the middle column behaves
-          when it becomes taller than the sidebars.
-        </p>
       </section>
     </div>
   </section>
+
+
+<section class="home-projects">
+  <header class="home-projects__header">
+    <div>
+      <h2>Projects</h2>
+    </div>
+
+    <a href="/projects">
+      View all
+    </a>
+  </header>
+
+  <div class="home-projects__list">
+    {projects.map((project) => (
+      <article class="home-project">
+        <header class="home-project__header">
+          <div>
+            <span class="home-project__status">
+              {project.data.status}
+            </span>
+
+            <h3>
+              <a href={`/projects/${project.id}`}>
+                {project.data.title}
+              </a>
+            </h3>
+          </div>
+
+          <span class="home-project__year">
+            {project.data.year}
+          </span>
+        </header>
+
+        <div class="home-project__content">
+          <p>
+            {project.data.description}
+          </p>
+
+          <div class="home-project__footer">
+            <div class="home-project__technologies">
+              {project.data.technologies.map((technology) => (
+                <span>{technology}</span>
+              ))}
+            </div>
+
+            <a
+              class="home-project__link"
+              href={`/projects/${project.id}`}
+            >
+              View project
+            </a>
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
 </main>

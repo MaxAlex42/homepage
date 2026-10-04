@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ThreeColumnLayout from "../../layouts/ThreeColumnLayout.astro";
+
+import ProjectFilters from "../../components/projects/ProjectFilters.astro";
+import ProjectList from "../../components/projects/ProjectList.astro";
+import ProjectSidebar from "../../components/projects/ProjectSidebar.astro";
+
+import "../../styles/projects.css";
+---
+
+<BaseLayout title="Projects | MaxAlex42">
+  <ThreeColumnLayout>
+    <ProjectFilters slot="left" />
+
+    <ProjectList />
+
+    <ProjectSidebar slot="right" />
+  </ThreeColumnLayout>
+</BaseLayout>

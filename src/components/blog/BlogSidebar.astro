@@ -1,0 +1,104 @@
+---
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+const tagSet = new Set<string>();
+
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagSet.add(tag);
+  }
+}
+
+const sortedPosts = [...posts].sort(
+  (a, b) =>
+    b.data.published.valueOf() -
+    a.data.published.valueOf()
+);
+
+const latestPost = sortedPosts[0];
+
+const years = new Set(
+  posts.map((post) =>
+    post.data.published.getFullYear()
+  )
+);
+
+const firstYear =
+  years.size > 0
+    ? Math.min(...years)
+    : new Date().getFullYear();
+---
+
+<aside class="blog-sidebar">
+
+  <section class="blog-info-block">
+    <header class="blog-info-block__header">
+      Blog Stats
+    </header>
+
+    <div class="blog-stats">
+      <div>
+        <span>Posts</span>
+        <strong>{posts.length}</strong>
+      </div>
+
+      <div>
+        <span>Tags</span>
+        <strong>{tagSet.size}</strong>
+      </div>
+
+      <div>
+        <span>Since</span>
+        <strong>{firstYear}</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-info-block">
+    <header class="blog-info-block__header">
+      Latest Post
+    </header>
+
+    <div class="blog-info-block__content">
+      {latestPost ? (
+        <>
+          <a
+            class="blog-latest-link"
+            href={`/blog/${latestPost.id}`}
+          >
+            {latestPost.data.title}
+          </a>
+
+          <time datetime={latestPost.data.published.toISOString()}>
+            {new Intl.DateTimeFormat("de-AT", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            }).format(latestPost.data.published)}
+          </time>
+        </>
+      ) : (
+        <p>No posts yet.</p>
+      )}
+    </div>
+  </section>
+
+  <section class="blog-info-block">
+    <header class="blog-info-block__header">
+      RSS Feed
+    </header>
+
+    <div class="blog-info-block__content">
+      <p>
+        Follow new posts with your RSS reader.
+      </p>
+
+      <a class="blog-rss-link" href="/rss.xml">
+        RSS Feed
+      </a>
+    </div>
+  </section>
+
+</aside>

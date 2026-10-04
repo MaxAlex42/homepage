@@ -1,0 +1,203 @@
+---
+import {
+  getCollection,
+  render,
+  type CollectionEntry,
+} from "astro:content";
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ThreeColumnLayout from "../../layouts/ThreeColumnLayout.astro";
+
+import "../../styles/projects.css";
+import "../../styles/project-content.css";
+
+
+export async function getStaticPaths() {
+  const projects = await getCollection(
+    "projects",
+    ({ data }) => !data.draft
+  );
+
+  return projects.map((project) => ({
+    params: {
+      id: project.id,
+    },
+
+    props: {
+      project,
+    },
+  }));
+}
+
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+
+const { Content } = await render(project);
+---
+
+<BaseLayout title={`${project.data.title} | MaxAlex42`}>
+  <ThreeColumnLayout>
+
+    <!-- LEFT SIDEBAR -->
+
+    <aside
+      slot="left"
+      class="project-detail-sidebar"
+      aria-label="Project navigation"
+    >
+      <header class="project-detail-sidebar__header">
+        Project
+      </header>
+
+      <div class="project-detail-sidebar__content">
+        <a
+          class="project-back-link"
+          href="/projects"
+        >
+          Back to Projects
+        </a>
+
+        <section class="project-detail-sidebar__section">
+          <span class="project-detail-sidebar__label">
+            Technologies
+          </span>
+
+          <div class="project-detail-tech">
+            {project.data.technologies.map((technology) => (
+              <span>{technology}</span>
+            ))}
+          </div>
+        </section>
+
+        <section class="project-detail-sidebar__section">
+          <span class="project-detail-sidebar__label">
+            Status
+          </span>
+
+          <span class="project-detail-status">
+            {project.data.status}
+          </span>
+        </section>
+      </div>
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <article class="project-detail">
+
+      <header class="project-detail__header">
+
+        <span class="project-detail__eyebrow">
+          Project
+        </span>
+
+        <h1>
+          {project.data.title}
+        </h1>
+
+        <p class="project-detail__description">
+          {project.data.description}
+        </p>
+
+        <div class="project-detail__meta">
+          <span>
+            {project.data.year}
+          </span>
+
+          <span>
+            {project.data.status}
+          </span>
+        </div>
+
+      </header>
+
+
+      <div class="project-detail__content">
+        <Content />
+      </div>
+
+
+    <footer class="project-detail__footer">
+        <a href="/projects">
+            Back to Projects
+        </a>
+    </footer>
+    </article>
+
+    <!-- RIGHT SIDEBAR -->
+
+    <aside
+      slot="right"
+      class="project-detail-sidebar"
+      aria-label="Project information"
+    >
+      <header class="project-detail-sidebar__header">
+        Project Info
+      </header>
+
+      <div class="project-detail-sidebar__content">
+
+        <div class="project-detail-stats">
+
+          <div>
+            <span>Year</span>
+            <strong>{project.data.year}</strong>
+          </div>
+
+          <div>
+            <span>Status</span>
+            <strong>{project.data.status}</strong>
+          </div>
+
+          <div>
+            <span>Stack</span>
+            <strong>
+              {project.data.technologies.length}
+            </strong>
+          </div>
+
+        </div>
+
+
+        {(project.data.repository || project.data.website) && (
+          <section class="project-detail-sidebar__section">
+            <span class="project-detail-sidebar__label">
+              Links
+            </span>
+
+            <div class="project-detail-links">
+
+              {project.data.website && (
+                <a
+                  href={project.data.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Live Project
+                </a>
+              )}
+
+              {project.data.repository && (
+                <a
+                  href={project.data.repository}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Repository
+                </a>
+              )}
+
+            </div>
+          </section>
+        )}
+
+      </div>
+    </aside>
+
+  </ThreeColumnLayout>
+</BaseLayout>

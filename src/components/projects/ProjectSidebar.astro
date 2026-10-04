@@ -1,0 +1,94 @@
+---
+import { getCollection } from "astro:content";
+
+const projects = await getCollection(
+  "projects",
+  ({ data }) => !data.draft
+);
+
+const activeProjects = projects.filter(
+  (project) => project.data.status === "active"
+).length;
+
+const finishedProjects = projects.filter(
+  (project) => project.data.status === "finished"
+).length;
+
+const featuredProjects = projects.filter(
+  (project) => project.data.featured
+);
+
+const latestProject = [...projects]
+  .sort((a, b) => b.data.year - a.data.year)[0];
+---
+
+<aside class="project-sidebar" aria-label="Project information">
+
+  <section class="project-info-block">
+    <header class="project-info-block__header">
+      Project Stats
+    </header>
+
+    <div class="project-info-block__content">
+      <div class="project-stats">
+        <div>
+          <span>Total</span>
+          <strong>{projects.length}</strong>
+        </div>
+
+        <div>
+          <span>Active</span>
+          <strong>{activeProjects}</strong>
+        </div>
+
+        <div>
+          <span>Finished</span>
+          <strong>{finishedProjects}</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {latestProject && (
+    <section class="project-info-block">
+      <header class="project-info-block__header">
+        Latest Project
+      </header>
+
+      <div class="project-info-block__content">
+        <span class="project-sidebar__meta">
+          {latestProject.data.status} · {latestProject.data.year}
+        </span>
+
+        <h2>
+          <a href={`/projects/${latestProject.id}`}>
+            {latestProject.data.title}
+          </a>
+        </h2>
+
+        <p>{latestProject.data.description}</p>
+      </div>
+    </section>
+  )}
+
+  {featuredProjects.length > 0 && (
+    <section class="project-info-block">
+      <header class="project-info-block__header">
+        Featured
+      </header>
+
+      <div class="project-info-block__content">
+        <ul class="project-featured-list">
+          {featuredProjects.map((project) => (
+            <li>
+              <a href={`/projects/${project.id}`}>
+                {project.data.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+</aside>

@@ -1,0 +1,108 @@
+---
+import { getCollection } from "astro:content";
+
+const projects = await getCollection(
+  "projects",
+  ({ data }) => !data.draft
+);
+
+const technologyCounts = new Map<string, number>();
+const statusCounts = new Map<string, number>();
+
+for (const project of projects) {
+  for (const technology of project.data.technologies) {
+    technologyCounts.set(
+      technology,
+      (technologyCounts.get(technology) ?? 0) + 1
+    );
+  }
+
+  statusCounts.set(
+    project.data.status,
+    (statusCounts.get(project.data.status) ?? 0) + 1
+  );
+}
+
+const technologies = [...technologyCounts.entries()]
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+
+const statuses = [...statusCounts.entries()]
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<aside class="project-filters" aria-label="Project filters">
+  <header class="project-filters__header">
+    Find Projects
+  </header>
+
+  <div class="project-filters__content">
+    <div class="project-filter-group">
+      <label for="project-search">
+        Search
+      </label>
+
+      <input
+        id="project-search"
+        type="search"
+        placeholder="Search projects..."
+      />
+    </div>
+
+    <div class="project-filter-group">
+      <span class="project-filter-group__title">
+        Status
+      </span>
+
+      <div class="project-filter-options">
+        {statuses.map((status) => (
+          <label class="project-filter-option">
+            <input
+              type="checkbox"
+              value={status.name}
+              data-project-status
+            />
+
+            <span>{status.name}</span>
+
+            <span class="project-filter-count">
+              {status.count}
+            </span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <div class="project-filter-group">
+      <span class="project-filter-group__title">
+        Technology
+      </span>
+
+      <div class="project-filter-options">
+        {technologies.map((technology) => (
+          <label class="project-filter-option">
+            <input
+              type="checkbox"
+              value={technology.name}
+              data-project-technology
+            />
+
+            <span>{technology.name}</span>
+
+            <span class="project-filter-count">
+              {technology.count}
+            </span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="project-clear-filters"
+    >
+      Clear filters
+    </button>
+  </div>
+</aside>
