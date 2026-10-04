@@ -1,0 +1,224 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ThreeColumnLayout from "../../layouts/ThreeColumnLayout.astro";
+
+import "../../styles/about.css";
+
+const technologies = [
+  "React",
+  "Angular",
+  ".NET",
+  "Python",
+  "C#",
+  "Java",
+  "C",
+  "C++",
+];
+
+const quickFacts = [
+  { label: "Location", value: "Austria" },
+  { label: "Role", value: "Fullstack Developer" },
+  { label: "Focus", value: "Software / Databases / DQ" },
+];
+
+const experience = [
+  {
+    role: "Software Developer",
+    company: "Kärntner Sparkasse AG",
+    period: "2026 — Present",
+    description:
+      "Working on fullstack software development with a focus on process automation.",
+    technologies: [".NET", "C#", "React", "Python"],
+  },
+  {
+    role: "Intern Software Development",
+    company: "Kärntner Sparkasse AG",
+    period: "Jan 2026 — Sept 2026",
+    description:
+      "Working on fullstack software development with a focus on process automation.",
+    technologies: [".NET", "C#", "React", "Python"],
+  },
+  {
+    role: "Intern AI Automation",
+    company: "Skidata GmbH",
+    period: "Jul 2025 — Sept 2025",
+    description:
+      "Implementation and evaluation of a NL to Elastic Search AI system for internal use",
+    technologies: ["Python", "Java", "Angular"],
+  },
+];
+
+const education = [
+  {
+    title: "BSc Applied Informatics",
+    institution: "Alpe-Adria Universität Klagenfurt",
+    period: "2022 — Present",
+  },
+];
+---
+
+<BaseLayout title="About | MaxAlex42">
+  <ThreeColumnLayout>
+    <aside slot="left" class="about-sidebar">
+      <section class="about-sidebar__block">
+        <header class="about-sidebar__header">Quick Facts</header>
+
+        <div class="about-sidebar__content">
+          <dl class="about-facts">
+            {
+              quickFacts.map((fact) => (
+                <div>
+                  <dt>{fact.label}</dt>
+                  <dd>{fact.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </section>
+
+      <section class="about-sidebar__block">
+        <header class="about-sidebar__header">Tech Stack</header>
+
+        <div class="about-sidebar__content">
+          <div class="about-tech">
+            {technologies.map((technology) => <span>{technology}</span>)}
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <main class="about-page">
+      <section class="about-card">
+        <header class="about-card__header">
+          <span class="about-card__eyebrow"> About </span>
+
+          <h1>MaxAlex42</h1>
+        </header>
+
+        <div class="about-card__content">
+          <p class="about-lead">
+            I'm a fullstack developer primarily focused on process automation.
+          </p>
+
+          <p>
+            My work spans modern web applications, Excel development, data
+            cleaning and visualization. What motivates me most is building
+            software that is actually useful. I like automating repetitive work,
+            removing unnecessary manual steps and creating tools that people
+            genuinely rely on. There are few things I find more boring than
+            spending time on software nobody ends up using.
+          </p>
+
+          <p>
+            My primary stack includes React, Angular, .NET, Python, C#, Java, C
+            and C++. But I primarily use C#, .NET, React and Python in my
+            working life.
+          </p>
+
+          <p>
+            This website serves as a place to collect my projects, technical
+            writing, experiments and tools and as an archive of my strange
+            ideas.
+          </p>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <header class="about-section__header">
+          <span>Career</span>
+          <h2>Experience</h2>
+        </header>
+
+        <div class="about-section__content">
+          <div class="about-timeline">
+            {
+              experience.map((item) => (
+                <article class="about-timeline__item">
+                  <div class="about-timeline__meta">
+                    <span>{item.period}</span>
+                  </div>
+
+                  <div class="about-timeline__body">
+                    <h3>{item.role}</h3>
+                    <p class="about-timeline__organization">{item.company}</p>
+
+                    <p>{item.description}</p>
+
+                    <div class="about-tech">
+                      {item.technologies.map((technology) => (
+                        <span>{technology}</span>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <header class="about-section__header">
+          <span>Background</span>
+          <h2>Education</h2>
+        </header>
+
+        <div class="about-section__content">
+          <div class="about-timeline">
+            {
+              education.map((item) => (
+                <article class="about-timeline__item">
+                  <div class="about-timeline__meta">
+                    <span>{item.period}</span>
+                  </div>
+
+                  <div class="about-timeline__body">
+                    <h3>{item.title}</h3>
+
+                    <p class="about-timeline__organization">
+                      {item.institution}
+                    </p>
+
+                    <p>{item.description}</p>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside slot="right" class="about-sidebar">
+      <section class="about-sidebar__block">
+        <header class="about-sidebar__header">Current Status</header>
+
+        <div class="about-sidebar__content">
+          <div class="about-status">
+            <span class="status-dot"></span>
+
+            <div>
+              <strong>Employed</strong>
+              <p>Currently working as a Software Developer at Kärntner Sparkasse AG.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-sidebar__block">
+        <header class="about-sidebar__header">Links</header>
+
+        <div class="about-sidebar__content">
+          <nav class="about-links">
+            <a href="/projects"> Projects</a>
+
+            <a href="/blog"> Blog</a>
+
+            <a href="/changelog"> Changelog</a>
+          </nav>
+        </div>
+      </section>
+    </aside>
+  </ThreeColumnLayout>
+</BaseLayout>

@@ -7,6 +7,13 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: "0.0.5",
+    title: "About Page",
+    description:
+      "Added a detailed About page with an expanded personal profile, professional focus, long-form CV structure, technology stack, experience, education, interests and supporting sidebar information.",
+    date: "2026-10-04",
+  },
+  {
     version: "0.0.4",
     title: "Projects System",
     description:
