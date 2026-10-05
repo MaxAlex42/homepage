@@ -10,7 +10,7 @@ export const changelog: ChangelogEntry[] = [
     version: "0.0.6",
     title: "Quiz System",
     description:
-      "Added a complete XML-powered quiz system with support for scored quizzes, multiple-choice questions, true-or-false questions, result-set personality quizzes, answer-based scoring, dynamic result evaluation, quiz filtering, progress tracking and retry functionality.",
+      "Added a complete XML-powered quiz system with support for scored quizzes, multiple-choice questions, true-or-false questions, result-set quizzes, answer-based scoring, dynamic result evaluation, quiz filtering, progress tracking and retry functionality.",
     date: "2026-10-05",
   },
   {
