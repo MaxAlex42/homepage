@@ -82,6 +82,7 @@ jobs:
           -mkdir _astro
           -mkdir blog
           -mkdir projects
+          -mkdir quizzes
           -mkdir about
           -mkdir changelog
           -mkdir images
@@ -96,6 +97,10 @@ jobs:
 
           cd projects
           put dist/projects/*
+          cd ..
+
+          cd quizzes
+          put dist/quizzes/*
           cd ..
 
           cd about
