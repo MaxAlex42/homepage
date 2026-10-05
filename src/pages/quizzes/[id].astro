@@ -1,0 +1,480 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ThreeColumnLayout from "../../layouts/ThreeColumnLayout.astro";
+import { getQuizzes, type Quiz } from "../../lib/quizzes";
+import "../../styles/quiz-content.css";
+
+export async function getStaticPaths() {
+  const quizzes = await getQuizzes();
+
+  return quizzes.map((quiz) => ({
+    params: {
+      id: quiz.id,
+    },
+
+    props: {
+      quiz,
+    },
+  }));
+}
+
+interface Props {
+  quiz: Quiz;
+}
+
+const { quiz } = Astro.props;
+---
+
+<BaseLayout title={`${quiz.title} | MaxAlex42`}>
+  <ThreeColumnLayout>
+    <aside slot="left" class="quiz-detail-sidebar">
+      <header class="quiz-detail-sidebar__header">Quiz</header>
+
+      <div class="quiz-detail-sidebar__content">
+        <a class="quiz-back-link" href="/quizzes"> Back to Quizzes </a>
+
+        <dl class="quiz-detail-meta">
+          <div>
+            <dt>Category</dt>
+            <dd>{quiz.category}</dd>
+          </div>
+
+          {
+            quiz.difficulty && (
+              <div>
+                <dt>Difficulty</dt>
+                <dd>{quiz.difficulty}</dd>
+              </div>
+            )
+          }
+
+          <div>
+            <dt>Type</dt>
+            <dd>
+              {quiz.mode === "result-set" ? "Result" : "Scored"}
+            </dd>
+          </div>
+
+          <div>
+            <dt>Questions</dt>
+            <dd>{quiz.questions.length}</dd>
+          </div>
+        </dl>
+      </div>
+    </aside>
+
+    <main
+      class="quiz-detail"
+      data-quiz
+      data-quiz-mode={quiz.mode}
+      data-quiz-results={JSON.stringify(quiz.results ?? [])}
+    >
+      <header class="quiz-detail__header">
+        <span class="quiz-detail__eyebrow">
+          {quiz.category}
+        </span>
+
+        <h1>
+          {quiz.title}
+        </h1>
+
+        <p>
+          {quiz.description}
+        </p>
+      </header>
+
+      <form class="quiz-detail__questions" data-quiz-form>
+        {
+          quiz.questions.map((question, questionIndex) => (
+            <section
+              class="quiz-question"
+              data-question
+              data-question-type={question.type}
+            >
+              <header class="quiz-question__header">
+                <span>Question {questionIndex + 1}</span>
+
+                <h2>{question.text}</h2>
+
+                {question.type === "multiple" && (
+                  <small>Select all applicable answers.</small>
+                )}
+              </header>
+
+              <div class="quiz-question__answers">
+                {question.answers.map((answer, answerIndex) => (
+                  <label class="quiz-answer">
+                    <input
+                      type={question.type === "multiple" ? "checkbox" : "radio"}
+                      name={`question-${questionIndex}`}
+                      value={answerIndex}
+                      data-correct={
+                        answer.correct === true
+                          ? "true"
+                          : answer.correct === false
+                            ? "false"
+                            : ""
+                      }
+                      data-scores={JSON.stringify(answer.scores ?? [])}
+                    />
+
+                    <span>{answer.text}</span>
+                  </label>
+                ))}
+              </div>
+
+              {question.explanation && (
+                <div class="quiz-question__explanation" data-explanation hidden>
+                  {question.explanation}
+                </div>
+              )}
+            </section>
+          ))
+        }
+
+        <div class="quiz-detail__actions">
+          <button type="submit"> Check Answers </button>
+        </div>
+      </form>
+
+      <section class="quiz-result" data-result hidden>
+        <span class="quiz-result__eyebrow"> Result </span>
+
+        <h2 data-result-title></h2>
+
+        <p data-score></p>
+
+        <p class="quiz-result__description" data-result-description></p>
+
+        <button type="button" data-retry> Try Again </button>
+      </section>
+    </main>
+
+    <aside slot="right" class="quiz-detail-sidebar">
+      <header class="quiz-detail-sidebar__header">Progress</header>
+
+      <div class="quiz-detail-sidebar__content">
+        <div class="quiz-progress">
+          <strong data-answered> 0 </strong>
+
+          <span>
+            / {quiz.questions.length}
+          </span>
+
+          <small> answered </small>
+        </div>
+      </div>
+    </aside>
+  </ThreeColumnLayout>
+</BaseLayout>
+
+<script>
+  interface QuizScore {
+    result: string;
+    points: number;
+  }
+
+  interface QuizResult {
+    id: string;
+    title: string;
+    description: string;
+  }
+
+  const quiz = document.querySelector<HTMLElement>("[data-quiz]");
+
+  const form = document.querySelector<HTMLFormElement>("[data-quiz-form]");
+
+  const questions = [
+    ...document.querySelectorAll<HTMLElement>("[data-question]"),
+  ];
+
+  const result = document.querySelector<HTMLElement>("[data-result]");
+
+  const scoreOutput = document.querySelector<HTMLElement>("[data-score]");
+
+  const resultTitle = document.querySelector<HTMLElement>(
+    "[data-result-title]",
+  );
+
+  const resultDescription = document.querySelector<HTMLElement>(
+    "[data-result-description]",
+  );
+
+  const answeredOutput = document.querySelector<HTMLElement>("[data-answered]");
+
+  const retryButton = document.querySelector<HTMLButtonElement>("[data-retry]");
+
+  const quizMode = quiz?.dataset.quizMode ?? "scored";
+
+  const quizResults: QuizResult[] = JSON.parse(
+    quiz?.dataset.quizResults ?? "[]",
+  );
+
+  function updateProgress() {
+    let answered = 0;
+
+    for (const question of questions) {
+      const selected = question.querySelector("input:checked");
+
+      if (selected) {
+        answered++;
+      }
+    }
+
+    if (answeredOutput) {
+      answeredOutput.textContent = String(answered);
+    }
+  }
+
+  function evaluateScoredQuiz() {
+    let score = 0;
+
+    for (const question of questions) {
+      const inputs = [...question.querySelectorAll<HTMLInputElement>("input")];
+
+      let questionCorrect = true;
+
+      for (const input of inputs) {
+        const shouldBeChecked = input.dataset.correct === "true";
+
+        if (input.checked !== shouldBeChecked) {
+          questionCorrect = false;
+        }
+      }
+
+      if (questionCorrect) {
+        score++;
+      }
+
+      for (const input of inputs) {
+        const answer = input.closest<HTMLElement>(".quiz-answer");
+
+        if (!answer) {
+          continue;
+        }
+
+        if (input.dataset.correct === "true") {
+          answer.classList.add("quiz-answer--correct");
+        }
+
+        if (input.checked && input.dataset.correct === "false") {
+          answer.classList.add("quiz-answer--wrong");
+        }
+
+        input.disabled = true;
+      }
+
+      const explanation =
+        question.querySelector<HTMLElement>("[data-explanation]");
+
+      if (explanation) {
+        explanation.hidden = false;
+      }
+    }
+
+    const total = questions.length;
+
+    const percentage = total === 0 ? 0 : Math.round((score / total) * 100);
+
+    if (resultTitle) {
+      resultTitle.textContent = "Quiz completed";
+    }
+
+    if (scoreOutput) {
+      scoreOutput.textContent = `${score} / ${total} correct — ${percentage}%`;
+    }
+
+    if (resultDescription) {
+      resultDescription.textContent = "";
+    }
+  }
+
+  function evaluateResultSetQuiz() {
+    const totals = new Map<string, number>();
+
+    /*
+     * Initialize all possible results.
+     */
+
+    for (const quizResult of quizResults) {
+      totals.set(quizResult.id, 0);
+    }
+
+    /*
+     * Read selected answers and add
+     * their result scores.
+     */
+
+    for (const question of questions) {
+      const selectedInputs = [
+        ...question.querySelectorAll<HTMLInputElement>("input:checked"),
+      ];
+
+      for (const input of selectedInputs) {
+        const scores: QuizScore[] = JSON.parse(input.dataset.scores ?? "[]");
+
+        for (const score of scores) {
+          const current = totals.get(score.result) ?? 0;
+
+          totals.set(score.result, current + score.points);
+        }
+      }
+
+      /*
+       * Lock question after evaluation.
+       */
+
+      const allInputs = question.querySelectorAll<HTMLInputElement>("input");
+
+      for (const input of allInputs) {
+        input.disabled = true;
+      }
+    }
+
+    /*
+     * Sort results from highest
+     * score to lowest.
+     */
+
+    const sortedResults = [...totals.entries()].sort((a, b) => b[1] - a[1]);
+
+    const winnerId = sortedResults[0]?.[0];
+
+    const winner = quizResults.find((result) => result.id === winnerId);
+
+    if (!winner) {
+      if (resultTitle) {
+        resultTitle.textContent = "No result found";
+      }
+
+      if (scoreOutput) {
+        scoreOutput.textContent = "";
+      }
+
+      if (resultDescription) {
+        resultDescription.textContent =
+          "The quiz could not determine a result.";
+      }
+
+      return;
+    }
+
+    if (resultTitle) {
+      resultTitle.textContent = winner.title;
+    }
+
+    if (scoreOutput) {
+      scoreOutput.textContent = "";
+    }
+
+    if (resultDescription) {
+      resultDescription.textContent = winner.description;
+    }
+
+    /*
+     * Helpful while developing.
+     */
+
+    console.log("Quiz result scores:", Object.fromEntries(totals));
+  }
+
+  form?.addEventListener("change", updateProgress);
+
+  form?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    /*
+     * Require at least one answer
+     * for each question.
+     */
+
+    const unanswered = questions.some(
+      (question) => !question.querySelector("input:checked"),
+    );
+
+    if (unanswered) {
+      alert("Please answer every question first.");
+
+      return;
+    }
+
+    /*
+     * Choose evaluation system.
+     */
+
+    if (quizMode === "result-set") {
+      evaluateResultSetQuiz();
+    } else {
+      evaluateScoredQuiz();
+    }
+
+    /*
+     * Show result.
+     */
+
+    if (result) {
+      result.hidden = false;
+
+      result.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  });
+
+  retryButton?.addEventListener("click", () => {
+    form?.reset();
+
+    /*
+     * Reset every question.
+     */
+
+    for (const question of questions) {
+      const explanation =
+        question.querySelector<HTMLElement>("[data-explanation]");
+
+      if (explanation) {
+        explanation.hidden = true;
+      }
+
+      const answers = [
+        ...question.querySelectorAll<HTMLElement>(".quiz-answer"),
+      ];
+
+      for (const answer of answers) {
+        answer.classList.remove("quiz-answer--correct", "quiz-answer--wrong");
+
+        const input = answer.querySelector<HTMLInputElement>("input");
+
+        if (input) {
+          input.disabled = false;
+        }
+      }
+    }
+
+    /*
+     * Reset result.
+     */
+
+    if (result) {
+      result.hidden = true;
+    }
+
+    if (resultTitle) {
+      resultTitle.textContent = "";
+    }
+
+    if (scoreOutput) {
+      scoreOutput.textContent = "";
+    }
+
+    if (resultDescription) {
+      resultDescription.textContent = "";
+    }
+
+    updateProgress();
+
+    form?.scrollIntoView({
+      behavior: "smooth",
+    });
+  });
+</script>

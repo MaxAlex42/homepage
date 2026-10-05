@@ -1,0 +1,188 @@
+---
+import BaseLayout
+  from "../../layouts/BaseLayout.astro";
+
+import ThreeColumnLayout
+  from "../../layouts/ThreeColumnLayout.astro";
+
+import QuizFilters
+  from "../../components/quizzes/QuizFilters.astro";
+
+import QuizList
+  from "../../components/quizzes/QuizList.astro";
+
+import QuizSidebar
+  from "../../components/quizzes/QuizSidebar.astro";
+
+import "../../styles/quizzes.css";
+---
+
+<BaseLayout title="Quizzes | MaxAlex42">
+
+  <ThreeColumnLayout>
+
+    <QuizFilters slot="left" />
+
+    <QuizList />
+
+    <QuizSidebar slot="right" />
+
+  </ThreeColumnLayout>
+
+</BaseLayout>
+
+
+<script>
+  const search =
+    document.querySelector<HTMLInputElement>(
+      "#quiz-search"
+    );
+
+  const cards = [
+    ...document.querySelectorAll<HTMLElement>(
+      "[data-quiz-card]"
+    ),
+  ];
+
+
+  const categoryInputs = [
+    ...document.querySelectorAll<HTMLInputElement>(
+      "[data-quiz-category]"
+    ),
+  ];
+
+
+  const difficultyInputs = [
+    ...document.querySelectorAll<HTMLInputElement>(
+      "[data-quiz-difficulty]"
+    ),
+  ];
+
+
+  const clearButton =
+    document.querySelector<HTMLButtonElement>(
+      ".quiz-clear-filters"
+    );
+
+
+  function filterQuizzes() {
+    const query =
+      search?.value
+        .trim()
+        .toLowerCase() ?? "";
+
+
+    const categories =
+      categoryInputs
+        .filter(
+          (input) => input.checked
+        )
+        .map(
+          (input) =>
+            input.value.toLowerCase()
+        );
+
+
+    const difficulties =
+      difficultyInputs
+        .filter(
+          (input) => input.checked
+        )
+        .map(
+          (input) =>
+            input.value.toLowerCase()
+        );
+
+
+    for (const card of cards) {
+      const title =
+        card.dataset.title ?? "";
+
+      const description =
+        card.dataset.description ?? "";
+
+      const category =
+        card.dataset.category ?? "";
+
+      const difficulty =
+        card.dataset.difficulty ?? "";
+
+
+      const matchesSearch =
+        !query ||
+        title.includes(query) ||
+        description.includes(query);
+
+
+      const matchesCategory =
+        categories.length === 0 ||
+        categories.includes(category);
+
+
+      const matchesDifficulty =
+        difficulties.length === 0 ||
+        difficulties.includes(
+          difficulty
+        );
+
+
+      card.hidden =
+        !(
+          matchesSearch &&
+          matchesCategory &&
+          matchesDifficulty
+        );
+    }
+  }
+
+
+  search?.addEventListener(
+    "input",
+    filterQuizzes
+  );
+
+
+  for (
+    const input of categoryInputs
+  ) {
+    input.addEventListener(
+      "change",
+      filterQuizzes
+    );
+  }
+
+
+  for (
+    const input of difficultyInputs
+  ) {
+    input.addEventListener(
+      "change",
+      filterQuizzes
+    );
+  }
+
+
+  clearButton?.addEventListener(
+    "click",
+    () => {
+
+      if (search) {
+        search.value = "";
+      }
+
+      for (
+        const input of categoryInputs
+      ) {
+        input.checked = false;
+      }
+
+      for (
+        const input of difficultyInputs
+      ) {
+        input.checked = false;
+      }
+
+      filterQuizzes();
+    }
+  );
+</script>

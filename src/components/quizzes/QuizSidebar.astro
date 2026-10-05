@@ -1,0 +1,103 @@
+---
+import {
+  getQuizzes,
+} from "../../lib/quizzes";
+
+const quizzes = await getQuizzes();
+
+const categories =
+  new Set(
+    quizzes.map(
+      (quiz) => quiz.category
+    )
+  );
+
+const totalQuestions =
+  quizzes.reduce(
+    (sum, quiz) =>
+      sum + quiz.questions.length,
+    0
+  );
+
+const difficulties = {
+  easy:
+    quizzes.filter(
+      (quiz) =>
+        quiz.difficulty === "easy"
+    ).length,
+
+  medium:
+    quizzes.filter(
+      (quiz) =>
+        quiz.difficulty === "medium"
+    ).length,
+
+  hard:
+    quizzes.filter(
+      (quiz) =>
+        quiz.difficulty === "hard"
+    ).length,
+};
+---
+
+<aside
+  class="quiz-sidebar"
+  aria-label="Quiz information"
+>
+
+  <section class="quiz-info-block">
+    <header class="quiz-info-block__header">
+      Quiz Stats
+    </header>
+
+    <div class="quiz-info-block__content">
+      <div class="quiz-stats">
+
+        <div>
+          <span>Quizzes</span>
+          <strong>{quizzes.length}</strong>
+        </div>
+
+        <div>
+          <span>Questions</span>
+          <strong>{totalQuestions}</strong>
+        </div>
+
+        <div>
+          <span>Categories</span>
+          <strong>{categories.size}</strong>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <section class="quiz-info-block">
+    <header class="quiz-info-block__header">
+      Difficulty
+    </header>
+
+    <div class="quiz-info-block__content">
+      <div class="quiz-stats">
+
+        <div>
+          <span>Easy</span>
+          <strong>{difficulties.easy}</strong>
+        </div>
+
+        <div>
+          <span>Medium</span>
+          <strong>{difficulties.medium}</strong>
+        </div>
+
+        <div>
+          <span>Hard</span>
+          <strong>{difficulties.hard}</strong>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</aside>

@@ -1,0 +1,37 @@
+---
+import QuizCard from "./QuizCard.astro";
+
+import { getQuizzes } from "../../lib/quizzes";
+
+const quizzes = await getQuizzes();
+---
+
+<section class="quiz-list">
+  <header class="quiz-hero">
+    <span class="quiz-hero__eyebrow"> Test Yourself </span>
+
+    <div class="quiz-hero__row">
+      <h1>Quizzes</h1>
+
+      <span class="quiz-hero__meta">
+        Questions, experiments & knowledge tests
+      </span>
+    </div>
+  </header>
+
+  <div class="quiz-list__entries">
+    {
+      quizzes.map((quiz) => (
+        <QuizCard
+          id={quiz.id}
+          title={quiz.title}
+          description={quiz.description}
+          category={quiz.category}
+          difficulty={quiz.difficulty}
+          mode={quiz.mode}
+          questionCount={quiz.questions.length}
+        />
+      ))
+    }
+  </div>
+</section>

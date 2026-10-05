@@ -1,0 +1,98 @@
+---
+import {
+  getQuizzes,
+} from "../../lib/quizzes";
+
+const quizzes = await getQuizzes();
+
+
+const categories =
+  [...new Set(
+    quizzes.map(
+      (quiz) => quiz.category
+    )
+  )].sort();
+
+
+const difficulties =
+  [...new Set(
+    quizzes.map(
+      (quiz) => quiz.difficulty
+    )
+  )].sort();
+---
+
+<aside
+  class="quiz-filters"
+  aria-label="Quiz filters"
+>
+  <header class="quiz-filters__header">
+    Find Quizzes
+  </header>
+
+  <div class="quiz-filters__content">
+
+    <div class="quiz-filter-group">
+      <label for="quiz-search">
+        Search
+      </label>
+
+      <input
+        id="quiz-search"
+        type="search"
+        placeholder="Search quizzes..."
+      />
+    </div>
+
+
+    <div class="quiz-filter-group">
+      <span class="quiz-filter-group__title">
+        Category
+      </span>
+
+      <div class="quiz-filter-options">
+        {categories.map((category) => (
+          <label class="quiz-filter-option">
+            <input
+              type="checkbox"
+              value={category}
+              data-quiz-category
+            />
+
+            <span>{category}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+
+    <div class="quiz-filter-group">
+      <span class="quiz-filter-group__title">
+        Difficulty
+      </span>
+
+      <div class="quiz-filter-options">
+        {difficulties.map((difficulty) => (
+          <label class="quiz-filter-option">
+            <input
+              type="checkbox"
+              value={difficulty}
+              data-quiz-difficulty
+            />
+
+            <span>{difficulty}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+
+    <button
+      type="button"
+      class="quiz-clear-filters"
+    >
+      Clear filters
+    </button>
+
+  </div>
+</aside>

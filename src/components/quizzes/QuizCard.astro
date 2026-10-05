@@ -1,0 +1,76 @@
+---
+import type {
+  QuizDifficulty,
+  QuizMode,
+} from "../../lib/quizzes";
+
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  difficulty?: QuizDifficulty;
+  mode: QuizMode;
+  questionCount: number;
+}
+
+const {
+  id,
+  title,
+  description,
+  category,
+  difficulty,
+  mode,
+  questionCount,
+} = Astro.props;
+
+const typeLabel =
+  mode === "result-set"
+    ? "Personality"
+    : difficulty ?? "Scored";
+---
+
+<article
+  class="quiz-card"
+  data-quiz-card
+  data-title={title.toLowerCase()}
+  data-description={description.toLowerCase()}
+  data-category={category.toLowerCase()}
+  data-difficulty={difficulty?.toLowerCase() ?? ""}
+  data-mode={mode}
+>
+  <header class="quiz-card__header">
+    <div>
+      <span class="quiz-card__category">
+        {category}
+      </span>
+
+      <h2>
+        <a href={`/quizzes/${id}`}>
+          {title}
+        </a>
+      </h2>
+    </div>
+
+    <span class="quiz-card__difficulty">
+      {typeLabel}
+    </span>
+  </header>
+
+  <div class="quiz-card__content">
+    <p>{description}</p>
+
+    <div class="quiz-card__meta">
+      <span>
+        {questionCount}
+        {questionCount === 1
+          ? " question"
+          : " questions"}
+      </span>
+
+      <a href={`/quizzes/${id}`}>
+        Take quiz
+      </a>
+    </div>
+  </div>
+</article>
