@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<quiz
+  id="pizza-test"
+  title="Which pizza are you?"
+  category="Personality"
+  mode="result-set"
+>
+  <description>
+    Answer a series of complex, highly scientific questions and discover your pizza type!
+  </description>
+
+  <results>
+    <result id="margherita">
+      <title>Pizza Margherita</title>
+      <description>
+        The classic and reliable. You do not experiment. You know what works and stick with the classics.
+        You are the backbone of society, maintaining order and light. Chaos fears you. People look up to you.
+      </description>
+    </result>
+
+    <result id="tuna">
+      <title>Pizza Tuna</title>
+      <description>
+        You are a well mannered individual, polite and kind. Dressed sharply.
+        But the coat of civilization is thin. You are contested by forces of darkness and light.
+        Drums... Drums... in the deep.
+      </description>
+    </result>
+
+    <result id="hawaiian">
+      <title>Pizza Hawaii</title>
+      <description>
+        You are a threat to society, thriving in pure darkness with absolutely no shame about your lack of taste.
+        People, cats and dogs avoid you. Your questionable decisions will set back mankind by several centuries.
+      </description>
+    </result>
+
+    <result id="salami">
+      <title>Pizza Salami</title>
+      <description>
+        You are a careful planner but chaotic in your organisation. You thrive under pressure but fail without it.
+        Your duality is your greatest strength. Adaptability and grimness are key factors for your success.
+        People fear your fondness for bearing grudges.
+      </description>
+    </result>
+  </results>
+
+
+  <question id="q1" type="single">
+    <text>
+      You are sitting on the toilet, fighting for your life. The temperature rises to unbearable levels.
+      What do you do?
+    </text>
+
+    <answers>
+      <answer>
+        Keep going. The flesh is weak but the mind wills it.
+        <score result="salami" points="3" />
+        <score result="tuna" points="1" />
+      </answer>
+
+      <answer>
+        Take your shirt off. Cool off quicker.
+        <score result="tuna" points="1" />
+        <score result="margherita" points="3" />
+      </answer>
+
+      <answer>
+        Hit the praying crusader pose. Structural support for the upper body is the key to success.
+        <score result="tuna" points="3" />
+        <score result="salami" points="1" />
+      </answer>
+
+      <answer>
+        Switch the sitting direction and cool your forehead on the cold tiles behind you.
+        <score result="hawaiian" points="3" />
+        <score result="tuna" points="1" />
+      </answer>
+    </answers>
+  </question>
+
+
+  <question id="q2" type="single">
+    <text>
+      As you are walking on the street the road surface changes from tarmac to cobblestones.
+      How do you adapt your walking style?
+    </text>
+
+    <answers>
+      <answer>
+        Throw yourself under the next car you encounter.
+        <score result="margherita" points="3" />
+      </answer>
+
+      <answer>
+        Twister (TM) down the street to step on as few cobble lines as possible.
+        <score result="salami" points="3" />
+      </answer>
+
+      <answer>
+        Keep walking in the same manner.
+        <score result="hawaiian" points="3" />
+      </answer>
+
+      <answer>
+        Take out your unicycle and ride down the street while juggling three orphans you "borrowed" earlier.
+        <score result="tuna" points="3" />
+      </answer>
+    </answers>
+  </question>
+
+
+  <question id="q3" type="single">
+    <text>
+      You are at a restaurant and find a hair in your food.
+      What do you do?
+    </text>
+
+    <answers>
+      <answer>
+        Tell the waiter and ask for a replacement.
+        <score result="margherita" points="3" />
+      </answer>
+
+      <answer>
+        Commit arson. Strangle the chef until he apologises and promises never to cook again, then start a fight with the waiting staff.
+        <score result="salami" points="3" />
+      </answer>
+
+      <answer>
+        Slurp down the stranger's hair and guzzle your food like nothing happened.
+        <score result="hawaiian" points="4" />
+      </answer>
+
+      <answer>
+        Shave your head at the table, then go to the kitchen and shove your cut hair down the chef's throat.
+        <score result="tuna" points="4" />
+      </answer>
+    </answers>
+  </question>
+
+
+  <question id="q4" type="single">
+    <text>
+      A cat is passing by you on the street.
+      How do you react?
+    </text>
+
+    <answers>
+      <answer>
+        Pspspspspsps.
+        <score result="margherita" points="4" />
+      </answer>
+
+      <answer>
+        You go down in a kneeling pose and worship the return of the goddess Bastet. The lands of the Nile will thrive under her protection.
+        <score result="tuna" points="3" />
+      </answer>
+
+      <answer>
+        Do nothing.
+        <score result="hawaiian" points="4" />
+      </answer>
+
+      <answer>
+        Put on your cat ears and follow the cat to their predetermined destination. The cats mission is now your mission.
+        <score result="salami" points="4" />
+      </answer>
+    </answers>
+  </question>
+
+
+  <question id="q5" type="single">
+    <text>
+      You are romantically approached by an eligible suspect.
+      What is your reaction?
+    </text>
+
+    <answers>
+      <answer>
+        Run away.
+        <score result="margherita" points="3" />
+      </answer>
+
+      <answer>
+        CIA spies are not welcome and you tell them very politely they should seek their luck elsewhere. Afterwards you throw all your electronics in a river.
+        <score result="salami" points="3" />
+      </answer>
+
+      <answer>
+        Engage in an interesting conversation with the suspect. Wait what happens next.
+        <score result="hawaiian" points="3" />
+      </answer>
+
+      <answer>
+        Shit yourself right then and there while engaging in a staring contest with the suspect.
+        <score result="tuna" points="4" />
+      </answer>
+    </answers>
+  </question>
+
+
+  <question id="q6" type="single">
+    <text>
+      Your best friend sends you an abysmal meme at 3:00 am.
+      How do you react?
+    </text>
+
+    <answers>
+      <answer>
+        Send back 'Haha' while keeping the same blank expression as before.
+        <score result="margherita" points="3" />
+      </answer>
+
+      <answer>
+        Send back one of your crusty stickers that act as alternatives to face-like reactions.
+        <score result="salami" points="3" />
+      </answer>
+
+      <answer>
+        Ignore it until morning and then forget about it.
+        <score result="hawaiian" points="4" />
+      </answer>
+
+      <answer>
+        Leak your friend's social security number on WeChat and send him lots of Winnie the Pooh Memes.
+        <score result="tuna" points="4" />
+      </answer>
+    </answers>
+  </question>
+
+
+  <question id="q7" type="single">
+    <text>
+      Your printer stops working.
+      What do you do?
+    </text>
+
+    <answers>
+      <answer>
+        It is what it is.
+        <score result="margherita" points="3" />
+      </answer>
+
+      <answer>
+        Hiss at it, then meow at it. If it does not work by then take the loss and buy a printing press.
+        <score result="salami" points="3" />
+      </answer>
+
+      <answer>
+        Try to fix it.
+        <score result="hawaiian" points="3" />
+      </answer>
+
+      <answer>
+        Treat it like a medieval Catholic official. Subject it to a classic Praguean defenestration.
+        <score result="tuna" points="4" />
+      </answer>
+    </answers>
+  </question>
+
+
+  <question id="q8" type="single">
+    <text>
+      Choose an object.
+    </text>
+
+    <answers>
+      <answer>
+        Three strands of Galadriel's hair.
+        <score result="margherita" points="3" />
+      </answer>
+
+      <answer>
+        Your cat ears. Cat ears should always be kept on your person.
+        <score result="salami" points="3" />
+      </answer>
+
+      <answer>
+        Pizza box.
+        <score result="hawaiian" points="4" />
+      </answer>
+
+      <answer>
+        A stranger's car tyres that you could swipe using the torque wrench you always carry with you, just in case. You put them next to the three glasses you nicked from the pub down the street.
+        <score result="tuna" points="4" />
+      </answer>
+    </answers>
+  </question>
+</quiz>
