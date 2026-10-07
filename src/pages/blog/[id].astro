@@ -1,13 +1,8 @@
 ---
-import {
-  getCollection,
-  render,
-  type CollectionEntry,
-} from "astro:content";
-
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ThreeColumnLayout from "../../layouts/ThreeColumnLayout.astro";
-
+import { getSeriesPosts } from "../../lib/blog";
 import "../../styles/blog.css";
 import "../../styles/blog-content.css";
 
@@ -15,8 +10,13 @@ export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
 
   return posts.map((post) => ({
-    params: { id: post.id },
-    props: { post },
+    params: {
+      id: post.id,
+    },
+
+    props: {
+      post,
+    },
   }));
 }
 
@@ -40,48 +40,95 @@ const formattedTime = new Intl.DateTimeFormat("de-AT", {
   hour12: false,
   timeZone: "Europe/Vienna",
 }).format(post.data.published);
+
+const isSeriesPost = Boolean(post.data.series);
+const seriesPosts = post.data.series
+  ? await getSeriesPosts(post.data.series.id)
+  : [];
+const currentSeriesIndex = post.data.series
+  ? seriesPosts.findIndex((entry) => entry.id === post.id)
+  : -1;
+const previousSeriesPost =
+  currentSeriesIndex > 0 ? seriesPosts[currentSeriesIndex - 1] : undefined;
+const nextSeriesPost =
+  currentSeriesIndex >= 0 && currentSeriesIndex < seriesPosts.length - 1
+    ? seriesPosts[currentSeriesIndex + 1]
+    : undefined;
 ---
 
 <BaseLayout title={`${post.data.title} | MaxAlex42`}>
   <ThreeColumnLayout>
-
     <aside slot="left" class="blog-post-sidebar">
-      <header class="blog-post-sidebar__header">
-        Navigation
-      </header>
+      <header class="blog-post-sidebar__header">Navigation</header>
 
       <div class="blog-post-sidebar__content">
-        <a class="blog-back-link" href="/blog">
-          Back to Blog
-        </a>
+        <a class="blog-back-link" href="/blog"> Back to Blog </a>
 
-        {post.data.tags.length > 0 && (
-          <section class="blog-post-sidebar__section">
-            <h2>Tags</h2>
+        {
+          isSeriesPost && (
+            <section class="blog-post-sidebar__section">
+              <h2>Series</h2>
 
-            <div class="blog-post-tags">
-              {post.data.tags.map((tag) => (
-                <span>{tag}</span>
-              ))}
-            </div>
-          </section>
-        )}
+              <div class="blog-post-series-info">
+                <a
+                  href={`/blog?series=${encodeURIComponent(
+                    post.data.series!.id,
+                  )}`}
+                >
+                  {post.data.series!.id}
+                </a>
+
+                <span>
+                  Part {post.data.series!.order} of {seriesPosts.length}
+                </span>
+              </div>
+            </section>
+          )
+        }
+
+        {
+          post.data.tags.length > 0 && (
+            <section class="blog-post-sidebar__section">
+              <h2>Tags</h2>
+
+              <div class="blog-post-tags">
+                {post.data.tags.map((tag: string) => (
+                  <span>{tag}</span>
+                ))}
+              </div>
+            </section>
+          )
+        }
       </div>
     </aside>
 
-
     <article class="blog-post">
       <header class="blog-post__header">
-        <span class="blog-post__eyebrow">
-          Blog Entry
-        </span>
+        <span class="blog-post__eyebrow"> Blog Entry </span>
 
-        <h1>{post.data.title}</h1>
+        <h1>
+          {post.data.title}
+        </h1>
 
         <div class="blog-post__header-meta">
           <time datetime={post.data.published.toISOString()}>
-            {formattedDate} · {formattedTime}
+            {formattedDate}
+            {" · "}
+            {formattedTime}
           </time>
+
+          {
+            isSeriesPost && (
+              <a
+                class="blog-post__series-link"
+                href={`/blog?series=${encodeURIComponent(
+                  post.data.series!.id,
+                )}`}
+              >
+                Series: {post.data.series!.id} · Part {post.data.series!.order}
+              </a>
+            )
+          }
         </div>
       </header>
 
@@ -89,50 +136,129 @@ const formattedTime = new Intl.DateTimeFormat("de-AT", {
         <Content />
       </div>
 
+      {
+        isSeriesPost && (
+          <nav class="blog-series-navigation" aria-label="Series navigation">
+            <div class="blog-series-navigation__previous">
+              {previousSeriesPost ? (
+                <a href={`/blog/${previousSeriesPost.id}`}>
+                  <span>← Previous</span>
+
+                  <strong>{previousSeriesPost.data.title}</strong>
+                </a>
+              ) : (
+                <span class="blog-series-navigation__empty">First part</span>
+              )}
+            </div>
+
+            <div class="blog-series-navigation__next">
+              {nextSeriesPost ? (
+                <a href={`/blog/${nextSeriesPost.id}`}>
+                  <span>Next →</span>
+
+                  <strong>{nextSeriesPost.data.title}</strong>
+                </a>
+              ) : (
+                <span class="blog-series-navigation__empty">Latest part</span>
+              )}
+            </div>
+          </nav>
+        )
+      }
+
       <footer class="blog-post__footer">
-        <a href="/blog">
-          Back to all posts
-        </a>
+        <a href="/blog"> Back to all posts </a>
       </footer>
     </article>
 
-
     <aside slot="right" class="blog-post-sidebar">
       <header class="blog-post-sidebar__header">
-        Post Info
+        {isSeriesPost ? "Series" : "Post Info"}
       </header>
 
       <div class="blog-post-sidebar__content">
-        <div class="blog-post-stats">
-          <div>
-            <span>Published</span>
-            <strong>{formattedDate}</strong>
-          </div>
+        {
+          isSeriesPost ? (
+            <div class="blog-series-list">
+              {seriesPosts.map((seriesPost, index) => (
+                <a
+                  href={`/blog/${seriesPost.id}`}
+                  class:list={[
+                    "blog-series-list__item",
 
-          <div>
-            <span>Time</span>
-            <strong>{formattedTime}</strong>
-          </div>
+                    {
+                      "blog-series-list__item--current":
+                        seriesPost.id === post.id,
+                    },
+                  ]}
+                >
+                  <span>Part {index + 1}</span>
 
-          <div>
-            <span>Tags</span>
-            <strong>{post.data.tags.length}</strong>
-          </div>
-        </div>
+                  <strong>{seriesPost.data.title}</strong>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <div class="blog-post-stats">
+              <div>
+                <span>Published</span>
+
+                <strong>{formattedDate}</strong>
+              </div>
+
+              <div>
+                <span>Time</span>
+
+                <strong>{formattedTime}</strong>
+              </div>
+
+              <div>
+                <span>Tags</span>
+
+                <strong>{post.data.tags.length}</strong>
+              </div>
+            </div>
+          )
+        }
+
+        {
+          isSeriesPost && (
+            <section class="blog-post-sidebar__section">
+              <h2>Post Info</h2>
+
+              <div class="blog-post-stats">
+                <div>
+                  <span>Published</span>
+
+                  <strong>{formattedDate}</strong>
+                </div>
+
+                <div>
+                  <span>Part</span>
+
+                  <strong>
+                    {post.data.series!.order}/{seriesPosts.length}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>Tags</span>
+
+                  <strong>{post.data.tags.length}</strong>
+                </div>
+              </div>
+            </section>
+          )
+        }
 
         <section class="blog-post-sidebar__section blog-post-rss">
           <h2>Follow</h2>
 
-          <p>
-            Want to know when something new appears?
-          </p>
+          <p>Want to know when something new appears?</p>
 
-          <a href="/rss.xml">
-            RSS Feed
-          </a>
+          <a href="/rss.xml"> RSS Feed </a>
         </section>
       </div>
     </aside>
-
   </ThreeColumnLayout>
 </BaseLayout>

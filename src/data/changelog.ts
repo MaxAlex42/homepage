@@ -7,6 +7,13 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: "0.0.7",
+    title: "Blog Series Support",
+    description:
+      "Added support for grouping blog posts into series using Markdown frontmatter, including series-aware post navigation, series indicators on blog cards, dynamic filtering by series, and combined series, tag and search filtering on the blog overview.",
+    date: "2026-10-07",
+  },
+  {
     version: "0.0.6",
     title: "Quiz System",
     description:

@@ -1,11 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ThreeColumnLayout from "../../layouts/ThreeColumnLayout.astro";
-
 import BlogFilters from "../../components/blog/BlogFilters.astro";
 import BlogList from "../../components/blog/BlogList.astro";
 import BlogSidebar from "../../components/blog/BlogSidebar.astro";
-
 import "../../styles/blog.css";
 ---
 
@@ -18,3 +16,140 @@ import "../../styles/blog.css";
     <BlogSidebar slot="right" />
   </ThreeColumnLayout>
 </BaseLayout>
+
+<script>
+  const search = document.querySelector<HTMLInputElement>("#blog-search");
+
+  const cards = [...document.querySelectorAll<HTMLElement>("[data-blog-card]")];
+
+  const tagInputs = [
+    ...document.querySelectorAll<HTMLInputElement>("[data-blog-tag]"),
+  ];
+
+  const seriesInputs = [
+    ...document.querySelectorAll<HTMLInputElement>("[data-blog-series]"),
+  ];
+
+  const clearButton = document.querySelector<HTMLButtonElement>(
+    ".blog-clear-filters",
+  );
+
+  /*
+   * Read initial series from URL:
+   *
+   * /blog?series=learning-astro
+   */
+
+  const url = new URL(window.location.href);
+
+  const initialSeries = url.searchParams.get("series");
+
+  /*
+   * Check matching series radio
+   * when arriving through a card.
+   */
+
+  if (initialSeries) {
+    const matchingInput = seriesInputs.find(
+      (input) => input.value === initialSeries,
+    );
+
+    if (matchingInput) {
+      matchingInput.checked = true;
+    }
+  }
+
+  function getSelectedSeries(): string {
+    const selected = seriesInputs.find((input) => input.checked);
+
+    return selected?.value.toLowerCase() ?? "";
+  }
+
+  function filterPosts() {
+    const query = search?.value.trim().toLowerCase() ?? "";
+
+    const selectedTags = tagInputs
+      .filter((input) => input.checked)
+      .map((input) => input.value.toLowerCase());
+
+    const selectedSeries = getSelectedSeries();
+
+    for (const card of cards) {
+      const title = card.dataset.title ?? "";
+
+      const abstract = card.dataset.abstract ?? "";
+
+      const tags = (card.dataset.tags ?? "").split(",").filter(Boolean);
+
+      const series = card.dataset.series?.toLowerCase() ?? "";
+
+      const matchesSearch =
+        !query || title.includes(query) || abstract.includes(query);
+
+      const matchesTags =
+        selectedTags.length === 0 ||
+        selectedTags.every((tag) => tags.includes(tag));
+
+      const matchesSeries = !selectedSeries || series === selectedSeries;
+
+      card.hidden = !(matchesSearch && matchesTags && matchesSeries);
+    }
+  }
+
+  function updateSeriesUrl() {
+    const selectedSeries = getSelectedSeries();
+
+    const url = new URL(window.location.href);
+
+    if (selectedSeries) {
+      url.searchParams.set("series", selectedSeries);
+    } else {
+      url.searchParams.delete("series");
+    }
+
+    window.history.replaceState({}, "", url);
+  }
+
+  search?.addEventListener("input", filterPosts);
+
+  for (const input of tagInputs) {
+    input.addEventListener("change", filterPosts);
+  }
+
+  for (const input of seriesInputs) {
+    input.addEventListener("change", () => {
+      updateSeriesUrl();
+      filterPosts();
+    });
+  }
+
+  clearButton?.addEventListener("click", () => {
+    if (search) {
+      search.value = "";
+    }
+
+    for (const input of tagInputs) {
+      input.checked = false;
+    }
+
+    for (const input of seriesInputs) {
+      input.checked = false;
+    }
+
+    const url = new URL(window.location.href);
+
+    url.searchParams.delete("series");
+
+    window.history.replaceState({}, "", url);
+
+    filterPosts();
+  });
+
+  /*
+   * Important:
+   * apply URL filters immediately
+   * on page load.
+   */
+
+  filterPosts();
+</script>

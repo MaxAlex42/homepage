@@ -2,13 +2,11 @@
 import { getCollection } from "astro:content";
 import BlogCard from "./BlogCard.astro";
 
-const posts = (await getCollection("blog", ({ data }) => {
-  return !data.draft;
-})).sort(
-  (a, b) =>
-    b.data.published.getTime() -
-    a.data.published.getTime()
-);
+const posts = (
+  await getCollection("blog", ({ data }) => {
+    return !data.draft;
+  })
+).sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
 ---
 
 <section class="blog-list">
@@ -18,21 +16,22 @@ const posts = (await getCollection("blog", ({ data }) => {
     <div class="blog-hero__row">
       <h1>Blog</h1>
 
-      <span class="blog-hero__meta">
-        Notes, projects & experiments
-      </span>
+      <span class="blog-hero__meta"> Notes, projects & experiments </span>
     </div>
   </header>
 
   <div class="blog-list__entries">
-    {posts.map((post) => (
-      <BlogCard
-        title={post.data.title}
-        abstract={post.data.abstract}
-        date={post.data.published}
-        tags={post.data.tags}
-        href={`/blog/${post.id}`}
-      />
-    ))}
+    {
+      posts.map((post) => (
+        <BlogCard
+          title={post.data.title}
+          abstract={post.data.abstract}
+          published={post.data.published}
+          tags={post.data.tags}
+          href={`/blog/${post.id}`}
+          series={post.data.series}
+        />
+      ))
+    }
   </div>
 </section>
