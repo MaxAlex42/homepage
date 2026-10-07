@@ -72,53 +72,28 @@ jobs:
           HETZNER_USER: ${{ secrets.HETZNER_USER }}
           HETZNER_REMOTE_PATH: ${{ secrets.HETZNER_REMOTE_PATH }}
         run: |
+          BATCH_FILE="$(mktemp)"
+
+          echo "cd $HETZNER_REMOTE_PATH" >> "$BATCH_FILE"
+
+          # Create every directory from dist/
+          find dist -type d | sort | while read -r dir; do
+            if [ "$dir" = "dist" ]; then
+              continue
+            fi
+
+            remote_dir="${dir#dist/}"
+            echo "-mkdir $remote_dir" >> "$BATCH_FILE"
+          done
+
+          # Upload every file while preserving its relative path
+          find dist -type f | sort | while read -r file; do
+            remote_file="${file#dist/}"
+            echo "put $file $remote_file" >> "$BATCH_FILE"
+          done
+
           sftp \
             -i ~/.ssh/hetzner \
             -P 22 \
-            "$HETZNER_USER@$HETZNER_HOST" <<EOF
-
-          cd $HETZNER_REMOTE_PATH
-
-          -mkdir _astro
-          -mkdir blog
-          -mkdir projects
-          -mkdir quizzes
-          -mkdir about
-          -mkdir changelog
-          -mkdir images
-
-          cd _astro
-          put dist/_astro/*
-          cd ..
-
-          cd blog
-          put dist/blog/*
-          cd ..
-
-          cd projects
-          put dist/projects/*
-          cd ..
-
-          cd quizzes
-          put dist/quizzes/*
-          cd ..
-
-          cd about
-          put dist/about/*
-          cd ..
-
-          cd changelog
-          put dist/changelog/*
-          cd ..
-
-          cd images
-          put dist/images/*
-          cd ..
-
-          put dist/index.html
-          put dist/rss.xml
-          put dist/favicon.ico
-          put dist/favicon.svg
-          put dist/robots.txt
-
-          EOF
+            -b "$BATCH_FILE" \
+            "$HETZNER_USER@$HETZNER_HOST"
