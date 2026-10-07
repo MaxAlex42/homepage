@@ -22,8 +22,8 @@
     <result id="tuna">
       <title>Pizza Tuna</title>
       <description>
-        You are a well mannered individual, polite and kind. Dressed sharply.
-        But the coat of civilization is thin. You are contested by forces of darkness and light.
+        You are a well-mannered individual, polite and kind. Sharply dressed.
+        But the veneer of civilisation is thin. You are contested by forces of darkness and light.
         Drums... Drums... in the deep.
       </description>
     </result>
@@ -32,7 +32,7 @@
       <title>Pizza Hawaii</title>
       <description>
         You are a threat to society, thriving in pure darkness with absolutely no shame about your lack of taste.
-        People, cats and dogs avoid you. Your questionable decisions will set back mankind by several centuries.
+        People, cats and dogs avoid you. Your questionable decisions will set mankind back by several centuries.
       </description>
     </result>
 
@@ -83,7 +83,7 @@
 
   <question id="q2" type="single">
     <text>
-      As you are walking on the street the road surface changes from tarmac to cobblestones.
+      As you are walking on the street, the road surface changes from tarmac to cobblestones.
       How do you adapt your walking style?
     </text>
 
@@ -164,7 +164,7 @@
       </answer>
 
       <answer>
-        Put on your cat ears and follow the cat to their predetermined destination. The cats mission is now your mission.
+        Put on your cat ears and follow the cat to their predetermined destination. The cat's mission is now your mission.
         <score result="salami" points="4" />
       </answer>
     </answers>
@@ -189,7 +189,7 @@
       </answer>
 
       <answer>
-        Engage in an interesting conversation with the suspect. Wait what happens next.
+        Engage in an interesting conversation with the suspect. Wait to see what happens next.
         <score result="hawaiian" points="3" />
       </answer>
 
@@ -224,7 +224,7 @@
       </answer>
 
       <answer>
-        Leak your friend's social security number on WeChat and send him lots of Winnie the Pooh Memes.
+        Leak your friend's social security number on WeChat and send him lots of Winnie the Pooh memes.
         <score result="tuna" points="4" />
       </answer>
     </answers>
@@ -244,7 +244,7 @@
       </answer>
 
       <answer>
-        Hiss at it, then meow at it. If it does not work by then take the loss and buy a printing press.
+        Hiss at it, then meow at it. If it does not work by then, take the loss and buy a printing press.
         <score result="salami" points="3" />
       </answer>
 
