@@ -5,7 +5,6 @@ const cvItems = [
   { label: "Location", value: "Austria" },
   { label: "Role", value: "Software Developer" },
   { label: "Focus", value: "Software / Databases / DQ" },
-  { label: "Education", value: "" },
 ];
 ---
 
@@ -28,14 +27,11 @@ const cvItems = [
 
       <div class="identity">
         <h2>MaxAlex42</h2>
-        <p>
-          Software engineer
-        </p>
       </div>
     </section>
 
     <section class="sidebar-section">
-      <h3>Short CV</h3>
+      <h3>Short Info</h3>
 
       <dl class="cv-list">
         {cvItems.map((item) => (
@@ -48,14 +44,14 @@ const cvItems = [
     </section>
 
     <section class="sidebar-section">
-      <h3>Current Status</h3>
+      <h3>Employment Status</h3>
 
       <div class="employment-status">
         <span class="status-dot" aria-hidden="true"></span>
 
         <div>
           <strong>Employed</strong>
-          <p>Currently working as a Software Developer.</p>
+          <p>Working as a Software Developer.</p>
         </div>
       </div>
     </section>
